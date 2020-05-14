@@ -1,29 +1,35 @@
-# **About**  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The (name not decided yet) ransomware is a functional, industrial grade ransomware targeting Windows systems that I have decided to create for learning about the inner workings of ransomware.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is written in Python, contrary to C or C++ which is supposed to be the languages for malware programming. Frankly, I chose Python because it was too much of a hassle to set up the development environment in my Macbook  
+## **NAME NOT DECIDED**  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The (name not decided yet) ransomware is a functional, industrial grade ransomware targeting Windows systems that I have decided to create for learning about the inner workings of ransomware.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is written in Python, contrary to C or C++ which is supposed to be the languages for malware programming. Frankly, I chose Python because it was too much of a hassle to set up the development environment in my Macbook  
 
-# **Feature List:**
-    ~~Encrypt, Decrypt Files~~  
-    ~~Delete Original Files~~  
-    Show ransom message  
-    Auto Payment Verification  
-    The ransom note should persist across restarts  
-    Privilege escalation  
-    Communicate via Tor  
-    Sandbox Evasion  
-    AV Evasion  
-    Obfuscate Code  
-    Multithreading/multiprocessing to speed up encryption  
-    [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
-    [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)
+## **Getting Started**
+Instructions on how to go about setting up in your local machine  
+### Prerequistes
 
-# **Encryption Mechanism**
-    encrypt all user files with AES-256-CBC.
+### Installing/Building
+
+## **Feature List:**
+ * ~~Encrypt, Decrypt Files~~  
+ * ~~Delete Original Files~~  
+ * Show ransom message  
+ * Auto Payment Verification  
+ * The ransom note should persist across restarts  
+ * Privilege escalation  
+ * Communicate via Tor  
+ * Sandbox Evasion  
+ * AV Evasion  
+ * Obfuscate Code  
+ * Multithreading/multiprocessing to speed up encryption  
+ * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
+ * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)
+ 
+## **Encryption Mechanism**
+    Encrypt all user files with AES-256-CBC.
     Random AES key and IV for each file.
-    encrypt AES keys with locally generated public key RSA-2048.
-    encrypt locally generated private key with RSA-2048 common public key.
-   
-# **File Structure and Explanation**
+    Encrypt AES keys with locally generated public key RSA-2048.
+    Encrypt locally generated private key with RSA-2048 common public key.
+       
+## **File Structure and Explanation**
     |
     |_ransomware => Ransomware related stuff
     |   |
@@ -36,3 +42,12 @@
     |   |_  utils.py => Helper functions needed to perfrom common tasks
     |
     |_README.md => Contians general info about the project
+
+## **License**
+    The project at this time is not allowed to be modified or used in anyway  
+
+## **Acknowledgments**
+ * [Encryption Scheme](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)  
+   ```
+    This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key   
+    ```
