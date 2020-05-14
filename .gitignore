@@ -140,3 +140,5 @@ log/
 ehthumbs.db
 Thumbs.db
 config.py
+*.5328
+*.txt
