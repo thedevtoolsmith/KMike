@@ -14,8 +14,8 @@
     AV Evasion  
     Obfuscate Code  
     Multithreading/multiprocessing to speed up encryption  
-    [Shutdown some processes before encrypting files to ensure no write lock is present](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
-    [Get C&C server via unusual mechanism](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)
+    [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
+    [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)
 
 # **Encryption Mechanism**
     encrypt all user files with AES-256-CBC.
