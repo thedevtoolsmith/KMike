@@ -47,7 +47,7 @@ Instructions on how to go about setting up in your local machine
     The project at this time is not allowed to be modified or used in anyway  
 
 ## **Acknowledgments**
- * [Encryption Scheme](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)  
+ * [Encryption Scheme - Tarcísio Marinho](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)  
    ```
-    This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key   
-    ```
+   This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key   
+   ```
