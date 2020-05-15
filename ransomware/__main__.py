@@ -6,10 +6,10 @@ from .config import LOCAL_PUBLIC_KEY
 
 
 # TODO: Find a better way to store the configuration variables
-# TODO: Local RSA key decryption should happen in the server side
 # TODO: Manual Garbage Collection
 # TODO: Add proper logging
 # TODO: Add license and Disclaimer
+
 # LOCAL_PUBLIC_KEY[0] = generate_rsa_key_pair()
 #
 # file_path = ["", ""]

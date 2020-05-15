@@ -23,15 +23,15 @@ def encrypt_files(file_paths):
         yield b64encode(aes_secret_key).decode("utf-8"), b64encode(aes_initialization_vector).decode("utf-8"), b64encode(new_file_path.encode("utf-8")).decode("utf-8")
 
 
-def encrypt_file_details(encoded_aes_secret_key, encoded_initialization_vector, encoded_file_path):
+def encrypt_file_details(b64encoded_aes_secret_key, b64encoded_initialization_vector, b64encoded_file_path):
     cipher = RSA(public_key=LOCAL_PUBLIC_KEY[0])
-    details = f"{encoded_aes_secret_key}\t{encoded_initialization_vector}\t{encoded_file_path}".encode("utf-8")
+    details = f"{b64encoded_aes_secret_key}\t{b64encoded_initialization_vector}\t{b64encoded_file_path}".encode("utf-8")
     encrypted_data = cipher.encrypt_data(details)
     return encrypted_data
 
 
 def start_encryption(file_paths):
-    list_of_file_details = [detail for detail in encrypt_files(file_paths)]
-    encrypted_file_details = [encrypt_file_details(file_detail[0], file_detail[1], file_detail[2]) for file_detail in list_of_file_details]
-    write_data_to_file(ENCRYPTED_AES_KEY_FILE_LOCATION, encrypted_file_details, serialized=False)
+    list_of_file_encryption_details = [detail for detail in encrypt_files(file_paths)]
+    encrypted_file_encryption_details = [encrypt_file_details(file_encryption_detail[0], file_encryption_detail[1], file_encryption_detail[2]) for file_encryption_detail in list_of_file_encryption_details]
+    write_data_to_file(ENCRYPTED_AES_KEY_FILE_LOCATION, encrypted_file_encryption_details, serialized=False)
 
