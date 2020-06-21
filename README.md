@@ -15,24 +15,29 @@ To be filled
 
 
 ## **Feature List:**
- * ~~Encrypt, Decrypt Files~~  
- * ~~Delete Original Files~~  
- * Show ransom message  
- * Auto Payment Verification  
- * The ransom note should persist across restarts  
- * Make the python code into an executable
- * Privilege escalation  
- * Communicate via Tor  
- * Sandbox Evasion  
- * AV Evasion  
- * Obfuscate Code  
- * Multithreading/multiprocessing to speed up encryption  
- * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
- * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)
+ * Basic Funcionality
+    * ~~Encrypt, Decrypt Files~~  
+    * ~~Delete Original Files~~
+    * Show ransom message
+    * Make the python code into an executable
+ * Write a C&C server
+    * Auto Payment Verification
+    * Communicate via Tor
+ * Evasion Techniques
+    * Sandbox Evasion  
+    * AV Evasion  
+    * Obfuscate Code
+ * Nice-to-have Features
+    * Privilege escalation     
+    * The ransom note should persist across restarts  
+    * Multithreading/multiprocessing to speed up encryption
+    * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)  
+    * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
+ 
 
 
 ## **License**
-    The project at this time is not allowed to be modified or used by anyone
+    The project is distributed under GNU GPL 3.0
       
 
 ## **Acknowledgments**
