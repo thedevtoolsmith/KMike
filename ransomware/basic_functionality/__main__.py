@@ -7,10 +7,10 @@ from .utils import get_files_to_be_encrypted
 logger = logging.getLogger(__name__)
 
 # TODO: Find a better way to store the configuration variables
-# TODO: Manual Garbage Collection
 # TODO: Add proper logging
-# TODO: Add license and Disclaimer
-
+# TODO: Solve the relative path issue while acessing files
+# TODO: Add exception handling
+# TODO: Implement Windows file traversal logic
 
 def encrypt_button_handler():
     logger.info("ENCRYPTION STARTED")
@@ -25,3 +25,7 @@ def decrypt_button_handler():
     logger.info("DECRYPTION STARTED")
     start_decryption()
     logger.info("DECRYPTION DONE")
+
+
+encrypt_button_handler()
+decrypt_button_handler()

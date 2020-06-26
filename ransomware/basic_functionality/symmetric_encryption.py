@@ -5,13 +5,14 @@ from cryptography.hazmat.backends import default_backend
 
 
 class AES:
-
     def __init__(self, secret_key=None, initialization_vector=None):
-            self._secret_key = secret_key
-            self._initialization_vector = initialization_vector
-            self._cipher = Cipher(algorithms.AES(self._secret_key),
-                                  modes.CBC(self._initialization_vector),
-                                  default_backend())
+        self._secret_key = secret_key
+        self._initialization_vector = initialization_vector
+        self._cipher = Cipher(
+            algorithms.AES(self._secret_key),
+            modes.CBC(self._initialization_vector),
+            default_backend(),
+        )
 
     def _pad_data(self, unpadded_data):
         padder = padding.PKCS7(AES_BLOCK_SIZE_IN_BITS).padder()
@@ -26,7 +27,9 @@ class AES:
     def encrypt_data(self, unencrypted_data):
         encryptor = self._cipher.encryptor()
         padded_unencrypted_data = self._pad_data(unencrypted_data)
-        encrypted_data = encryptor.update(padded_unencrypted_data) + encryptor.finalize()
+        encrypted_data = (
+            encryptor.update(padded_unencrypted_data) + encryptor.finalize()
+        )
         return encrypted_data
 
     def decrypt_data(self, encrypted_data):
@@ -50,5 +53,4 @@ class AES:
     @initialization_vector.setter
     def initialization_vector(self, value):
         self._initialization_vector = value
-
 

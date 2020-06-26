@@ -132,10 +132,6 @@ dmypy.json
 .vscode/
 log/
 .idea/
-c_and_c_server/venv/
-ransomware/venv/
-encrypt_test/
-reference/
 .DS_Store
 .DS_Store?
 ._*
@@ -145,3 +141,9 @@ ehthumbs.db
 Thumbs.db
 config.py
 *.5328
+ransomware/basic_functionality/MASTER_PUBLIC_KEY
+c_and_c_server/MASTER_PRIVATE_KEY
+c_and_c_server/venv/
+ransomware/venv/
+encrypt_test/
+reference/
