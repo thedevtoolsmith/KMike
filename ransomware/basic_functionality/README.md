@@ -6,7 +6,7 @@
        
 
 ## **File Structure and Explanation**
-    ransomware => Ransomware related stuff
+    basic_functionality => Encryption and Decryption related code
       |
       |_  __init__.py => Make python file a package
       |_  __main__.py => Driver file which specifies the files to be encrypted and calls required functions
@@ -15,3 +15,8 @@
       |_  encrypt_files.py => Has functions which encrypt files and keys
       |_  symmetric_encryption.py => Contains defintions related to AES
       |_  utils.py => Helper functions needed to perform common tasks
+
+## **Points to note**
+* The details such as file_path and AES initialization vector are base64 encoded before being written to disk because I ran into some exceptions while trying to store them as they were.
+* The encrypted local private key is being sent as a base64 encoded string because bytes are not JSON serializable.
+* All the base64 encoded data will be bytes, so the conversion to ASCII needs to be done before getting them as strings. ASCII was chosen because the `b64decode()` functioncan handle ASCII strings by default.
