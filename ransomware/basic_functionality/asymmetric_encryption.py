@@ -1,4 +1,4 @@
-from .config import RSA_PUBLIC_EXPONENT, RSA_KEY_SIZE_IN_BITS
+from config import RSA_PUBLIC_EXPONENT, RSA_KEY_SIZE_IN_BITS
 from cryptography.hazmat.primitives.asymmetric import rsa, padding as asymmetric_padding
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.backends import default_backend

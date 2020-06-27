@@ -1,8 +1,8 @@
 import logging
 from random import randint
 from os import urandom, remove, path, listdir
-from .asymmetric_encryption import RSA
-from .config import ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, MASTER_PUBLIC_KEY
+from asymmetric_encryption import RSA
+from config import ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, MASTER_PUBLIC_KEY
 from pickle import load, dump, HIGHEST_PROTOCOL
 
 

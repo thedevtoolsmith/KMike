@@ -18,21 +18,21 @@ To be filled
  * Basic Funcionality
     * ~~Encrypt, Decrypt Files~~  
     * ~~Delete Original Files~~
+    * Generate Random Bitcoin Address
     * Show ransom message
     * Make the python code into an executable
+    * Use a domain generation algorithm
+    * Priviledge checking     
  * Write a C&C server
-    * Communicate via Tor
+    * Auto Payment Verification
  * Evasion Techniques
     * Sandbox Evasion  
     * AV Evasion  
     * Obfuscate Code
  * Nice-to-have Features
-    * Privilege escalation     
     * The ransom note and the process should persist across restarts  
     * Multithreading/multiprocessing to speed up encryption
-    * Auto Payment Verification
     * Collect statistics about the user
-    * Use a domain generation algorithm
     * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)  
     * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
  
@@ -43,7 +43,11 @@ To be filled
       
 
 ## **Acknowledgments**
+ * [The post that started this all - DespaREto](https://medium.com/@despaREto/how-not-to-write-ransomware-1985aa1384a3)
+   ```
+   This blog post titled "How not to write ransomware" got me thinking on how to actually write a good ransomware, then, lo and behold Druid was born
+   ```
  * [Encryption Scheme - Tarcísio Marinho](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)  
    ```
-   This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key   
+   This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key by dividing it into parts   
    ```

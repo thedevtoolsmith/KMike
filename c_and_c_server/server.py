@@ -5,9 +5,13 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.backends import default_backend
 import logging
 
+logging.basicConfig(
+    format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-logger = logging.getLogger(__name__)
+
 RSA_KEY_SIZE_IN_BITS = 2048
 RSA_PUBLIC_EXPONENT = 65537
 MASTER_PRIVATE_KEY = open(
@@ -22,6 +26,7 @@ class RSA:
         self._public_key = self._private_key.public_key()
 
     def _get_padding(self):
+
         padder = asymmetric_padding.OAEP(
             mgf=asymmetric_padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
