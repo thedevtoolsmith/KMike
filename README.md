@@ -44,10 +44,10 @@ To be filled
 
 ## **Acknowledgments**
  * [The post that started this all - DespaREto](https://medium.com/@despaREto/how-not-to-write-ransomware-1985aa1384a3)
-   ```
+ 
    This blog post titled "How not to write ransomware" got me thinking on how to actually write a good ransomware, then, lo and behold Druid was born
-   ```
+   
  * [Encryption Scheme - Tarcísio Marinho](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)  
-   ```
+   
    This blog post helped me with deciding the encryption scheme used and the accompanying repo helped me with solving the problem of encrypting the locally generated RSA public key by dividing it into parts   
-   ```
+   
