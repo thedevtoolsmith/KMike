@@ -11,7 +11,8 @@ from config import (
     UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
     UNENCRYPTED_AES_KEY_FILE_LOCATION,
-    C_AND_C_SERVER_URL,
+    ENCRYPTED_BITCOIN_KEY_LOCATION,
+    BITCOIN_WALLET_ID_PATH,
 )
 
 
@@ -67,6 +68,8 @@ def decrypt_file(aes_key, initialization_vector, encrypted_file_path):
 def delete_key_files():
     utils.shred_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
     utils.shred_file(UNENCRYPTED_AES_KEY_FILE_LOCATION)
+    utils.shred_file(ENCRYPTED_BITCOIN_KEY_LOCATION)
+    utils.shred_file(BITCOIN_WALLET_ID_PATH)
 
 
 def decrypt_files():
