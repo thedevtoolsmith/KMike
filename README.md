@@ -18,7 +18,7 @@ To be filled
  * Basic Funcionality
     * ~~Encrypt, Decrypt Files~~  
     * ~~Delete Original Files~~
-    * Generate Random Bitcoin Address
+    * ~~Generate Random Bitcoin Address~~
     * Show ransom message
     * Make the python code into an executable
     * Use a domain generation algorithm

