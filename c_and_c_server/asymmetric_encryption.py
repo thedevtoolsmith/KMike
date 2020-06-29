@@ -1,4 +1,8 @@
-from cryptography.hazmat.primitives.asymmetric import rsa, ec, padding as asymmetric_padding
+from cryptography.hazmat.primitives.asymmetric import (
+    rsa,
+    ec,
+    padding as asymmetric_padding,
+)
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.backends import default_backend
 
@@ -21,7 +25,6 @@ class ECC:
         else:
             self._private_key = ec.generate_private_key(self._curve, self._backend)
             self._public_key = self._private_key.public_key()
-
 
     def _load_private_key_from_byte_string(self, private_key):
         serialized_private_key = serialization.load_pem_private_key(
@@ -51,6 +54,7 @@ class ECC:
             format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
         return serialized_public_key
+
 
 class RSA:
     def __init__(self):

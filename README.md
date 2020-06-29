@@ -23,6 +23,7 @@ To be filled
     * Make the python code into an executable
     * Use a domain generation algorithm
     * Priviledge checking     
+    * Delete Shadow files
  * Write a C&C server
     * Auto Payment Verification
  * Evasion Techniques

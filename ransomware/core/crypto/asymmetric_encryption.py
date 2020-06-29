@@ -1,4 +1,4 @@
-from config import RSA_PUBLIC_EXPONENT, RSA_KEY_SIZE_IN_BITS
+from . import RSA_PUBLIC_EXPONENT, RSA_KEY_SIZE_IN_BITS
 from cryptography.hazmat.primitives.asymmetric import (
     rsa,
     ec,

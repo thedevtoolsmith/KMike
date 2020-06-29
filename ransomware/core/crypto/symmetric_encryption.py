@@ -1,4 +1,4 @@
-from config import AES_BLOCK_SIZE_IN_BITS
+from . import AES_BLOCK_SIZE_IN_BITS
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
