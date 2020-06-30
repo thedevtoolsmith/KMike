@@ -21,14 +21,12 @@ except Exception as err:
 
 @app.route("/initialise", methods=["POST"])
 def initialise():
-    request_parameters = request.get_json()
-    return process_request(request_parameters, "initialise")
+    return process_request(request, "initialise")
 
 
 @app.route("/decrypt", methods=["POST"])
 def decrypt():
-    request_parameters = request.get_json()
-    return process_request(request_parameters, "decrypt")
+    return process_request(request, "decrypt")
 
 
 if __name__ == "__main__":

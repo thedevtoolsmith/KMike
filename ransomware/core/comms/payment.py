@@ -32,7 +32,6 @@ def build_request():
 def send_request(server, body):
     logger.info(f"Sending request to {server}")
     response = requests.post(url=f"{server}/initialise", json=body).json()
-    print(response)
     return response
 
 
@@ -41,8 +40,6 @@ def get_bitcoin_wallet_address():
     response = send_request(server="http://localhost:5000", body=body)
     client_id = response.get("client_id")
     wallet_id = response.get("wallet_id")
-    print(client_id)
-    print(utils.get_client_id())
     if utils.get_client_id() == client_id:
         logger.info("Wallet ID successfully received")
         utils.write_data_to_file(BITCOIN_WALLET_ID_PATH, wallet_id.encode())

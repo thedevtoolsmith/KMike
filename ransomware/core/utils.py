@@ -3,7 +3,7 @@ import hashlib
 import uuid
 from random import randint
 from os import urandom, remove, path, listdir
-from core.crypto.asymmetric_encryption import RSA, ECC
+from core.crypto.asymmetric_encryption import RSA
 from .config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     MASTER_PUBLIC_KEY,

@@ -4,6 +4,8 @@ from payment import verify_payment, generate_bitcoin_address
 from db import insert_statistics_to_database
 from validation import validate_decryption_request, validate_initialisation_request
 import logging
+import urllib
+import ipaddress
 
 logger = logging.getLogger(__name__)
 
@@ -65,20 +67,43 @@ def the_error_message():
     return {"fun":"quote"}
 
 
-def process_request(parameters, request_type):
+def format_and_insert_statistics_to_database(client_id, statistics, request):
+    """Format statistics data
+
+    Args:
+        client_id (str): Unique client id
+        statistics (dict): Various info about client
+        request (flask.request): The incoming request object 
+    """    
+    statistics["client_id"] = client_id
+    ip = ipaddress.ip_address(request.remote_addr)
+    statistics["ip_address"] = str(ip)
+    if not ip.is_private:
+        url = f"https://ipinfo.io/{str(ip)}/json"
+    else:
+        url = "https://ipinfo.io/json"
+    try:
+        statistics["location"] = urllib.request.urlopen(url).get("loc","Hogwarts")
+    except urllib.error.URLError:
+        statistics["location"] = "Hogwarts"
+    insert_statistics_to_database(statistics)
+    
+
+def process_request(request, request_type):
     """Acts as a driver function to process requests
 
     Args:
-        parameters (dict): A dict containing all the request parameters
+        request (dict): The request object
         request_type (str): A string indicating the type of message
 
     Returns:
         dict: The response with various parameters included
     """    
     try:
+        parameters = request.get_json()
         if request_type == "initialise" and validate_initialisation_request(parameters):
             client_id, statistics = unpack_initialise_request(parameters)
-            insert_statistics_to_database(statistics, client_id)
+            format_and_insert_statistics_to_database(client_id, statistics, request)
             wallet_id = generate_bitcoin_address(client_id)
             return {"client_id": client_id, "wallet_id": wallet_id}
 
