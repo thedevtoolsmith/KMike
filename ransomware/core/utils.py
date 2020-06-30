@@ -75,8 +75,8 @@ def get_client_id():
     if path.exists(CLIENT_ID_LOCATION):
         client_id = read_data_from_file(CLIENT_ID_LOCATION).decode()
     else:
-        client_id = str(uuid.uuid4()).encode()
-        write_data_to_file(CLIENT_ID_LOCATION, client_id)
+        client_id = str(uuid.uuid4())
+        write_data_to_file(CLIENT_ID_LOCATION, client_id.encode())
     return client_id
 
 def get_files_to_be_encrypted(directory):

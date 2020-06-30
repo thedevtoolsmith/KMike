@@ -1,23 +1,24 @@
 from flask import Flask, request
-from utils import (
-    basic_parameter_check,
-    unpack_decrypt_request,
-    decrypt_rsa_data,
-    bitcoin_checks,
-    unpack_initialise_request,
-    process_request,
-)
-from payment import generate_bitcoin_address
-from db import insert_statistics_to_database
+from utils import process_request
+from db import create_tables
 import logging
 
-logging.basicConfig(format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
-app = Flask(__name__)
-
-
+# TODO: FIND IP AND LOCATION IN INSERT TO DB
 # TODO: Implement bitcoin checks
-# TODO: Add proper request validation
+# TODO: Check flow to return details if asked for a second time
+# TODO: Check flow for unique code and key
+# TODO: Find a better way to store the configuration variables
+
+try:
+    logging.basicConfig(format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    app = Flask(__name__)
+    create_tables()
+except Exception as err:
+    logger.error(f"Exception: {err}")
+
+
+
 @app.route("/initialise", methods=["POST"])
 def initialise():
     request_parameters = request.get_json()
