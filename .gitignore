@@ -137,11 +137,10 @@ log/
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
-Thumbs.db
+*.db
 config.py
 *.5328
-ransomware/basic_functionality/MASTER_PUBLIC_KEY
+ransomware/core/MASTER_PUBLIC_KEY
 c_and_c_server/MASTER_PRIVATE_KEY
 c_and_c_server/venv/
 ransomware/venv/

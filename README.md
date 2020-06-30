@@ -25,7 +25,7 @@ To be filled
     * Priviledge checking     
     * Delete Shadow files
  * Write a C&C server
-    * Auto Payment Verification
+    * ~~Auto Payment Verification~~
  * Evasion Techniques
     * Sandbox Evasion  
     * AV Evasion  
