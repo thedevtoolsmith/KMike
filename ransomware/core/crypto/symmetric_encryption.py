@@ -20,6 +20,7 @@ class AES:
             default_backend(),
         )
 
+
     def _pad_data(self, unpadded_data):
         """Pads the given data for encryption
 
@@ -33,6 +34,7 @@ class AES:
         padded_data = padder.update(unpadded_data) + padder.finalize()
         return padded_data
 
+
     def _unpad_data(self, padded_data):
         """Unpads the given data after decryption
 
@@ -45,6 +47,7 @@ class AES:
         unpadder = padding.PKCS7(AES_BLOCK_SIZE_IN_BITS).unpadder()
         unpadded_data = unpadder.update(padded_data) + unpadder.finalize()
         return unpadded_data
+
 
     def encrypt_data(self, unencrypted_data):
         """Encrypts given data using AES
@@ -62,6 +65,7 @@ class AES:
         )
         return encrypted_data
 
+
     def decrypt_data(self, encrypted_data):
         """Decrypt given data
 
@@ -76,6 +80,7 @@ class AES:
         unpadded_encrypted_data = self._unpad_data(unencrypted_data)
         return unpadded_encrypted_data
 
+
     @property
     def secret_key(self):
         """Getter method for secret_key
@@ -84,6 +89,7 @@ class AES:
             bytes: secret key of AES 
         """        
         return self._secret_key
+
 
     @secret_key.setter
     def secret_key(self, value):
@@ -94,6 +100,7 @@ class AES:
         """        
         self._secret_key = value
 
+
     @property
     def initialization_vector(self):
         """Getter method for initialization_vector
@@ -102,6 +109,7 @@ class AES:
             bytes: 16 bytes AES initialization vector
         """        
         return self._initialization_vector
+
 
     @initialization_vector.setter
     def initialization_vector(self, value):

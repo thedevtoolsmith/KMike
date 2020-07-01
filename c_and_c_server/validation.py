@@ -18,7 +18,6 @@ initialisation_parameters = {
             "device_name": {"type": "string", "required": True},
             "username": {"type": "string", "required": True},
             "is_admin": {"type": "boolean", "required": True},
-            "infected_time": {"type": "string", "required": True},
         },
     },
 }

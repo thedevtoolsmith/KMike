@@ -33,7 +33,7 @@ To be filled
  * Nice-to-have Features
     * The ransom note and the process should persist across restarts  
     * Multithreading/multiprocessing to speed up encryption
-    * Collect statistics about the user
+    * ~~Collect statistics about the user~~
     * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)  
     * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
  

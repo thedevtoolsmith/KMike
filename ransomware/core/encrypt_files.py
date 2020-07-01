@@ -10,12 +10,8 @@ from core.config import (
     LOCAL_PUBLIC_KEY,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
 )
-from core.utils import (
-    read_data_from_file,
-    write_data_to_file,
-    shred_file,
-    generate_rsa_key_pair,
-)
+from core.utils.file_ops import read_data_from_file, write_data_to_file, shred_file
+from core.utils.generators import generate_rsa_key_pair
 from base64 import b64encode
 
 

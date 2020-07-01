@@ -3,8 +3,7 @@ from utils import process_request
 from db import create_tables
 import logging
 
-# TODO: FIND IP AND LOCATION IN INSERT TO DB
-# TODO: Implement bitcoin checks
+
 # TODO: Check flow to return details if asked for a second time
 # TODO: Check flow for unique code and key
 # TODO: Find a better way to store the configuration variables
@@ -16,7 +15,6 @@ try:
     create_tables()
 except Exception as err:
     logger.error(f"Exception: {err}")
-
 
 
 @app.route("/initialise", methods=["POST"])
