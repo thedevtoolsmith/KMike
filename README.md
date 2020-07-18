@@ -43,7 +43,7 @@ To be filled
     The project is distributed under GNU GPL 3.0
       
 
-## **Acknowledgments**
+## **Mentions**
  * [The post that started this all - DespaREto](https://medium.com/@despaREto/how-not-to-write-ransomware-1985aa1384a3)
  * [Encryption Scheme - Tarcísio Marinho](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)     
  * [Generating Bitcoin Wallet Address - Timur Badretdinov](https://www.freecodecamp.org/news/how-to-create-a-bitcoin-wallet-address-from-a-private-key-eca3ddd9c05f/)   

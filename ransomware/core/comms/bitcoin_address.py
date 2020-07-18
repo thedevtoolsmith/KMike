@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 def build_request():
+    """Build the bitcoin address generation request body
+
+    Returns:
+        dict: The parameters required for bitcoin address generation request
+    """    
     logger.info("Building initalisation Request")
     body = {
         "client_id": generate_client_id(),
@@ -23,12 +28,26 @@ def build_request():
 
 
 def send_request(server, body):
+    """Send the request to the server and return the response 
+
+    Args:
+        server (str): The domain name of the server
+        body (dict): The request parameters
+
+    Returns:
+        dict: The response parameters
+    """    
     logger.info(f"Sending request to {server}")
     response = requests.post(url=f"{server}/initialise", json=body).json()
     return response
 
 
 def get_bitcoin_wallet_address():
+    """Driver function to generate bitcoin request by calling the server
+
+    Returns:
+        str: The wallet Id that the user needs to make payments to
+    """    
     body = build_request()
     response = send_request(server="http://localhost:5000", body=body)
     client_id = response.get("client_id")

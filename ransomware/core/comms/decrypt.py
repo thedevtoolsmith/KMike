@@ -13,8 +13,12 @@ logger = logging.getLogger(__name__)
 
 
 def build_request():
-    logger.info("Building decrypt request")
+    """Build the decrypt request body
 
+    Returns:
+        dict: The parameters required for decrypt request
+    """    
+    logger.info("Building decrypt request")
     encrypted_local_rsa_key_parts = read_data_from_file(
         ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, serialized=False
     )
@@ -34,12 +38,26 @@ def build_request():
 
 
 def send_request(server, body):
+    """Send the request to the server and return the response 
+
+    Args:
+        server (str): The domain name of the server
+        body (dict): The request parameters
+
+    Returns:
+        dict: The response parameters
+    """
     logger.info(f"Sending request to {server}")
     response = requests.post(url=f"{server}/decrypt", json=body).json()
     return b64decode(response.get("key"))
 
 
 def get_decrypted_key_from_server():
+    """Driver function to decrypt files by getting local RSA key from the server
+
+    Returns:
+        bytes: The decrypted local RSA key
+    """   
     body = build_request()
     key = send_request(server="http://localhost:5000", body=body)
     return key

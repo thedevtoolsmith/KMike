@@ -55,7 +55,7 @@ def shred_file(file_path):
         length = file_to_be_deleted.tell()
 
     with open(file_path, "br+") as file_to_be_deleted:
-        for _ in range(randint(3, 11)):
+        for _ in range(randint(3, 7)):
             file_to_be_deleted.seek(0)
             file_to_be_deleted.write(urandom(length))
 

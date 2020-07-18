@@ -8,9 +8,7 @@ from cryptography.hazmat.backends import default_backend
 
 RSA_KEY_SIZE_IN_BITS = 2048
 RSA_PUBLIC_EXPONENT = 65537
-MASTER_PRIVATE_KEY = open(
-    "/Users/surya/Desktop/Druid/c_and_c_server/MASTER_PRIVATE_KEY", "rb"
-).read()
+MASTER_PRIVATE_KEY = open("./MASTER_PRIVATE_KEY", "rb").read()
 
 
 class ECC:
@@ -32,6 +30,7 @@ class ECC:
             self._private_key = ec.generate_private_key(self._curve, self._backend)
             self._public_key = self._private_key.public_key()
 
+
     def _load_private_key_from_byte_string(self, private_key):
         """Loads private key from a byte string
 
@@ -45,6 +44,7 @@ class ECC:
             data=private_key, password=None, backend=self._backend
         )
         return serialized_private_key
+
 
     def _load_public_key_from_byte_string(self, public_key):
         """Loads public key from a byte string
@@ -60,6 +60,7 @@ class ECC:
         )
         return serialized_public_key
 
+
     @property
     def private_key(self):
         """Serializes an ECC private key object
@@ -73,6 +74,7 @@ class ECC:
             encryption_algorithm=serialization.NoEncryption(),
         )
         return serialized_private_key
+
 
     @property
     def public_key(self):
@@ -96,6 +98,7 @@ class RSA:
         self._private_key = self._load_private_key_from_byte_string(MASTER_PRIVATE_KEY)
         self._public_key = self._private_key.public_key()
 
+
     def _get_padding(self):
         """Returns padder for encryption and decryption
 
@@ -108,6 +111,7 @@ class RSA:
             label=None,
         )
         return padder
+
 
     def decrypt_data(self, encrypted_data):
         """Method to decrypt data
@@ -123,6 +127,7 @@ class RSA:
         )
         return unencrypted_data
 
+
     def _load_private_key_from_byte_string(self, private_key):
         """Loads a private key object from a byte string 
 
@@ -137,6 +142,7 @@ class RSA:
         )
         return serialized_private_key
 
+
     @property
     def private_key(self):
         """Serializes private key object
@@ -150,6 +156,7 @@ class RSA:
             encryption_algorithm=serialization.NoEncryption(),
         )
         return serialized_private_key
+
 
     @property
     def public_key(self):

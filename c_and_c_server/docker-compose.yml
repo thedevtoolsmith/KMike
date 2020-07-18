@@ -1,0 +1,8 @@
+version: '3'
+services:
+  cnc_server:
+    build: ../c_and_c_server
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - .:/c_and_c_server
