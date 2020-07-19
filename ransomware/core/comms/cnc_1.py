@@ -1,7 +1,7 @@
 import requests
 
 def get_cnc_from_youtube():
-    # link = https://www.youtube.com/watch?v=dQw4w9WgXcQ #Test link. REMOVE before pushing
+    # link = https://youtu.be/8gqOVKsUnPs
     pass
 
 
