@@ -50,7 +50,7 @@ def send_request(server, body):
     """
     logger.info(f"Sending request to {server}")
     try:
-        response = requests.post(url=f"{server}/decrypt", json=body).json()
+        response = requests.post(url=f"http://{server}/decrypt", json=body).json()
         return b64decode(response.get("key"))
     except Exception as err:
         logger.error(err)

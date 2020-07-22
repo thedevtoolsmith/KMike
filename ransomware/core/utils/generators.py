@@ -32,6 +32,10 @@ def generate_rsa_key_pair():
         ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, encrypted_private_key, False
     )
 
+    write_data_to_file(
+        LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION, serialized_public_key, False
+    )
+
     return serialized_public_key
 
 
