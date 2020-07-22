@@ -4,7 +4,7 @@ from payment import verify_payment, generate_bitcoin_address
 from db import insert_statistics_to_database
 from validation import validate_decryption_request, validate_initialisation_request
 import logging
-import urllib
+import requests
 import ipaddress
 
 logger = logging.getLogger(__name__)
@@ -76,15 +76,20 @@ def format_and_insert_statistics_to_database(client_id, statistics, request):
         request (flask.request): The incoming request object 
     """    
     statistics["client_id"] = client_id
-    ip = ipaddress.ip_address(request.remote_addr)
+    if request.headers.getlist("X-Forwarded-For"):
+        ip = ipaddress.ip_address(request.headers.getlist("X-Forwarded-For")[0])
+    else:
+        ip = ipaddress.ip_address(request.remote_addr)
+
     statistics["ip_address"] = str(ip)
-    try:
-        if not ip.is_private:
-            url = f"https://ipinfo.io/{str(ip)}/json"
-            statistics["location"] = urllib.request.urlopen(url).get("loc","Hogwarts")
-        statistics["location"] = "Hogwarts"
-    except urllib.error.URLError:
-        statistics["location"] = "Hogwarts"
+    if not ip.is_private:
+        url = f"https://ipinfo.io/{str(ip)}/json"
+        try:
+            statistics["location"] = requests.get(url).json().get("loc","Hogwarts")
+        except Exception as err:
+            logger.error(err)
+            statistics["location"] = "Hogwarts"
+    
     insert_statistics_to_database(statistics)
     
 
@@ -113,5 +118,4 @@ def process_request(request, request_type):
     
     except Exception as err:
         logger.error(f"Exception occured:{err}")
-    
-    return the_error_message()
+        return the_error_message()

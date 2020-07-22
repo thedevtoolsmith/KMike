@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 # TODO: Add exception handling
 # TODO: Implement Windows file traversal logic
 # TODO: Add explicit garbage collection
-# TODO: Add comprehensive Logging
 # TODO: Add double encryption protection
 
 

