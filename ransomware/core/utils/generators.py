@@ -3,6 +3,7 @@ from core.config import (
     MASTER_PUBLIC_KEY,
     ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
     CLIENT_ID_LOCATION,
+    LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION
 )
 from core.utils.file_ops import write_data_to_file, read_data_from_file
 import logging
