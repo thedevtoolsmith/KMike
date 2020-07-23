@@ -11,7 +11,7 @@ logger = logging.getLogger()
 
 def encrypt_button_handler():
     logger.info("ENCRYPTION STARTED")
-    current_directory = "/Users/surya/Desktop/Druid/encrypt_test"
+    current_directory = r"C:\Users\IEUser\Desktop\test"
     # current_directory = os.path.dirname(os.path.abspath(__file__))
     list_of_files_to_be_encrypted = get_files_to_be_encrypted(current_directory)
     start_encryption(list_of_files_to_be_encrypted)
