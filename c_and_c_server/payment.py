@@ -127,6 +127,10 @@ def generate_bitcoin_address(client_id):
     serialized_private_key = cipher.private_key
     serialized_public_key = cipher.public_key
 
+    wallet_address = get_bitcoin_wallet_id_database(client_id)
+    if wallet_address:
+        return wallet_address
+
     wallet_address = generate_bitcoin_wallet_address(serialized_public_key)
     wif_encoded_private_key = encode_private_key_in_wif(serialized_private_key)
 

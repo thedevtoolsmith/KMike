@@ -3,10 +3,7 @@ from utils import process_request
 from db import create_tables
 import logging
 
-
-# TODO: Check flow to return details if asked for a second time
-# TODO: Check flow for unique code and key
-# TODO: Find a better way to store the configuration variables
+# TODO: Send out proper error codes
 
 try:
     logging.basicConfig(format="%(asctime)s %(module)s %(levelname)s: %(message)s", level=logging.INFO)
