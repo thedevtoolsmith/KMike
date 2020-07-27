@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def create_connection():
     try:
         connection = sqlite3.connect("data.db")
@@ -21,7 +22,7 @@ def create_tables():
         sqlite3.IntegrityError: Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails.
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
-    """    
+    """
     logger.info("Creating tables")
     connection = create_connection()
     cursor = connection.cursor()
@@ -46,7 +47,7 @@ def insert_statistics_to_database(statistics):
         sqlite3.IntegrityError: Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails.
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
-    """    
+    """
     try:
         logger.info("Inserting statistics into database")
         connection = create_connection()
@@ -57,9 +58,11 @@ def insert_statistics_to_database(statistics):
         connection.close()
     except sqlite3.IntegrityError as err:
         logger.error(f"{err}: Client ID already present")
-    
 
-def insert_bitcoin_details_to_database(client_id, wallet_address, wif_encoded_private_key, public_key):
+
+def insert_bitcoin_details_to_database(
+    client_id, wallet_address, wif_encoded_private_key, public_key
+):
     """Inserts bitcoin details of each elient into the database. It is invoked when a new bitcoin address is generated.
 
     Args:
@@ -73,12 +76,15 @@ def insert_bitcoin_details_to_database(client_id, wallet_address, wif_encoded_pr
         sqlite3.IntegrityError: Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails.
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
-    """    
+    """
     logger.info("Inserting bitcoin details into database")
     connection = create_connection()
     cursor = connection.cursor()
     bitcoin_details_insert_query = "INSERT INTO `bitcoin_details` (client_id, wallet_address, public_key, wif_private_key) VALUES (?, ?, ?, ?);"
-    cursor.execute(bitcoin_details_insert_query, [client_id, wallet_address, public_key, wif_encoded_private_key])
+    cursor.execute(
+        bitcoin_details_insert_query,
+        [client_id, wallet_address, public_key, wif_encoded_private_key],
+    )
     connection.commit()
     connection.close()
 
@@ -97,15 +103,15 @@ def get_bitcoin_wallet_id_database(client_id):
         sqlite3.IntegrityError: Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails.
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
-    """    
+    """
     logger.info("Getting wallet id from database")
     connection = create_connection()
     cursor = connection.cursor()
     wallet_query = "SELECT wallet_address FROM `bitcoin_details` where client_id = ?;"
     result = cursor.execute(wallet_query, [client_id])
     id = result.fetchone()
+    connection.close()
     if id is not None:
-        connection.close()
         return id[0]
 
 
@@ -121,11 +127,13 @@ def insert_payment_details_into_database(client_id, payee_wallet_address):
         sqlite3.IntegrityError: Exception raised when the relational integrity of the database is affected, e.g. a foreign key check fails.
         sqlite3.ProgrammingError: Exception raised for programming errors, e.g. table not found or already exists, syntax error in the SQL statement, wrong number of parameters specified, etc.
         sqlite3.OperationalError: Exception raised for errors that are related to the database’s operation.
-    """    
+    """
     logger.info("Inserting payment details into database")
     connection = create_connection()
     cursor = connection.cursor()
     payment_details_insert_query = "INSERT INTO `payment_details`(client_id, payee_address, is_decrypted) VALUES (?, ?, ?)"
-    cursor.execute(payment_details_insert_query, [client_id, payee_wallet_address, True])
+    cursor.execute(
+        payment_details_insert_query, [client_id, payee_wallet_address, True]
+    )
     connection.commit()
     connection.close()

