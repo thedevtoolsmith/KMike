@@ -51,7 +51,10 @@ def send_request(server, body):
     logger.info(f"Sending request to {server}")
     try:
         response = requests.post(url=f"http://{server}/decrypt", json=body).json()
-        return b64decode(response.get("key"))
+        if response.status_code // 100 == 2:
+            return response
+        else:
+            logger.error(f"Some problem in server. Received {response.status_code}")
     except Exception as err:
         logger.error(err)
 
@@ -65,6 +68,9 @@ def get_decrypted_key_from_server():
     body = build_request()
     domains = generate_domains()
     for domain in domains:
-        key = send_request(server=domain, body=body)
-        return key
+        response = send_request(server=domain, body=body)
+        if response:
+            return b64decode(response.get("key"))
+        else:
+            raise Exception()
 

@@ -40,9 +40,11 @@ def send_request(server, body):
     """    
     logger.info(f"Sending request to {server}")
     try:
-        response = requests.post(url=f"http://{server.strip('/')}/initialise", json=body).json()
-        print(response)
-        return response
+        response = requests.post(url=f"http://{server.strip('/')}/initialise", json=body)
+        if response.status_code // 100 == 2: 
+            return response
+        else:
+            logger.error(f"Some problem in server. Received {response.status_code}")
     except Exception as err:
         logger.error(err)
 
@@ -57,12 +59,11 @@ def get_bitcoin_wallet_address():
     domains = generate_domains()
     for domain in domains:
         response = send_request(server=domain, body=body)
-        if response:
-            client_id = response.get("client_id")
-            wallet_id = response.get("wallet_id")
-            print(client_id, wallet_id)
-            if generate_client_id() == client_id:
-                logger.info("Wallet ID successfully received")
-                write_data_to_file(BITCOIN_WALLET_ID_PATH, wallet_id.encode())
-                return response.get("wallet_id")
+        if response and generate_client_id() == response.get("client_id"):
+            logger.info("Wallet ID successfully received")
+            write_data_to_file(BITCOIN_WALLET_ID_PATH, response.get("wallet_id").encode())
+            return response.get("wallet_id")
+        else:
+            raise Exception()
+
 

