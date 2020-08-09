@@ -13,14 +13,11 @@ logger = logging.getLogger()
 def encrypt_button_handler():
     logger.info("ENCRYPTION STARTED")
     if getattr(sys, 'frozen', False):
-        application_path = sys._MEIPASS
+        application_path = os.path.dirname(sys.executable)
     else:
-        application_path = os.path.dirname(os.path.abspath(__file__))
-    # print("Application Path",application_path, "\nmodule path", __name__)
+        application_path = os.path.dirname(os.path.abspath(__name__))
 
-    current_directory = r"/Users/surya/Desktop/Druid/encrypt_test"
-    # current_directory = os.path.dirname(os.path.abspath(__file__))
-    list_of_files_to_be_encrypted = get_files_to_be_encrypted(current_directory)
+    list_of_files_to_be_encrypted = get_files_to_be_encrypted(application_path)
     start_encryption(list_of_files_to_be_encrypted)
     logger.info("ENCRYPTION DONE")
 

@@ -6,12 +6,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# TODO: Find a better way to store the configuration variables
-# TODO: Solve the relative path issue while acessing files
 # TODO: Add exception handling
-# TODO: Implement Windows file traversal logic
 # TODO: Add explicit garbage collection
-# TODO: Add double encryption protection
 
 
 def main():
