@@ -1,7 +1,5 @@
 import tkinter as tk
 import logging
-import sys
-import os
 from tkinter import ttk 
 from core.encrypt_files import start_encryption
 from core.decrypt_files import start_decryption

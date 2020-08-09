@@ -77,9 +77,9 @@ def get_files_to_be_encrypted():
         [type]: [description]
     """
     if getattr(sys, 'frozen', False):
-        application_directory = os.path.dirname(sys.executable)
+        application_directory = path.dirname(sys.executable)
     else:
-        application_directory = os.path.dirname(os.path.abspath(__name__))
+        application_directory = path.dirname(path.abspath(__name__))
         
     logger.info(f"Discovering files in {application_directory}")
     files_to_encrypted = [
