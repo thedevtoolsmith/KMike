@@ -14,30 +14,11 @@ To be filled
 To be filled
 
 
-## **Feature List:**
- * Basic Funcionality
-    * ~~Encrypt, Decrypt Files~~  
-    * ~~Delete Original Files~~
-    * ~~Generate Random Bitcoin Address~~
-    * ~~Show ransom message~~
-    * Make the python code into an executable
-    * ~~Use a domain generation algorithm~~
-    * Priviledge checking     
-    * Delete Shadow files
- * Write a C&C server
-    * ~~Auto Payment Verification~~
- * Evasion Techniques
-    * Sandbox Evasion  
-    * AV Evasion  
-    * Obfuscate Code
- * Nice-to-have Features
-    * The ransom note and the process should persist across restarts  
-    * Multithreading/multiprocessing to speed up encryption
-    * ~~Collect statistics about the user~~
-    * ~~[`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)~~
-    * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
+## **TODO**
+ * Sandbox Evasion
+ * Develop proper fake GUI
+ * Multiprocessing to speed up encryption
  
-
 
 ## **License**
     The project is distributed under GNU GPL 3.0
