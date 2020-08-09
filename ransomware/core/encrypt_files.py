@@ -33,7 +33,7 @@ def encrypt_files(file_paths):
 
         shred_file(file_path)
 
-        return {
+        yield {
             "aes_secret_key": b64encode(aes_secret_key).decode("ascii"),
             "aes_initialization_vector": b64encode(aes_initialization_vector).decode(
                 "ascii"
@@ -53,7 +53,7 @@ def encrypt_file_details(cipher, b64encoded_aes_secret_key, b64encoded_initializ
 def start_encryption(file_paths):
     if not path.exists(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION):
         local_public_key = generate_rsa_key_pair()
-        write_data_to_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION)
+        write_data_to_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION, local_public_key)
     else:
         local_public_key = read_data_from_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION)
     

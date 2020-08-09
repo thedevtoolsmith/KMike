@@ -82,5 +82,5 @@ def get_files_to_be_encrypted(directory):
         for f in file
         if path.splitext(f)[1].upper() in REQUIRED_FILE_FORMAT
     ]
-    print(files_to_encrypted)
+    #print(files_to_encrypted)
     return files_to_encrypted

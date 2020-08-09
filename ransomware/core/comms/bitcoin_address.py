@@ -42,7 +42,7 @@ def send_request(server, body):
     try:
         response = requests.post(url=f"http://{server.strip('/')}/initialise", json=body)
         if response.status_code // 100 == 2: 
-            return response
+            return response.json()
         else:
             logger.error(f"Some problem in server. Received {response.status_code}")
     except Exception as err:
@@ -63,7 +63,7 @@ def get_bitcoin_wallet_address():
             logger.info("Wallet ID successfully received")
             write_data_to_file(BITCOIN_WALLET_ID_PATH, response.get("wallet_id").encode())
             return response.get("wallet_id")
-        else:
-            raise Exception()
+    
+    raise Exception()
 
 

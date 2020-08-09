@@ -28,9 +28,12 @@ def encrypt_button_handler():
 
 
 def decrypt_button_handler():
-    logger.info("DECRYPTION STARTED")
-    start_decryption()
-    logger.info("DECRYPTION DONE")
+    try:
+        logger.info("DECRYPTION STARTED")
+        start_decryption()
+        logger.info("DECRYPTION DONE")
+    except Exception as err:
+        return "Oops!! Something is wrong. Try again after sometime"
 
 
 def get_payment_details():

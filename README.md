@@ -1,7 +1,7 @@
 ## **Krombopulos Michael (KMike)**  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMike is a functional, industrial grade ransomware targeting Windows systems that I have decided to create for learning about the inner workings of ransomware.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is written in Python, contrary to C or C++ which is supposed to be the languages for malware programming.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Python was chosen because it was too much of a hassle to set up the C development environment in my Macbook and I have no intention of deploying the malware, so the performance and size do not matter.   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMike is a ransomware that I decided to create for learning about the inner workings of ransomware.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is written in Python, contrary to C or C++ which are supposed to be the languages for malware programming.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Python was chosen because it was too much of a hassle to set up the C development environment in my Macbook and I have no intention of deploying the malware, so the performance and size do not matter. The ransomware design intentionally includes some choices to deter people from using it for nefarious purposes.    
 
 
 ## **Getting Started**
@@ -19,9 +19,9 @@ To be filled
     * ~~Encrypt, Decrypt Files~~  
     * ~~Delete Original Files~~
     * ~~Generate Random Bitcoin Address~~
-    * Show ransom message
+    * ~~Show ransom message~~
     * Make the python code into an executable
-    * Use a domain generation algorithm
+    * ~~Use a domain generation algorithm~~
     * Priviledge checking     
     * Delete Shadow files
  * Write a C&C server
@@ -34,7 +34,7 @@ To be filled
     * The ransom note and the process should persist across restarts  
     * Multithreading/multiprocessing to speed up encryption
     * ~~Collect statistics about the user~~
-    * [`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)  
+    * ~~[`Get C&C server via unusual mechanism`](https://www.zdnet.com/article/astaroth-malware-hides-command-servers-in-youtube-channel-descriptions/)~~
     * [`Shutdown some processes before encrypting files to ensure no write lock is present`](https://securityaffairs.co/wordpress/103030/malware/sodinokibi-ransomware-new-feature.html)  
  
 

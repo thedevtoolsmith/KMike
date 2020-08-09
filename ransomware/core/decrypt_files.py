@@ -24,15 +24,16 @@ def decrypt_local_rsa_key():
     logger.info("Decrypting local RSA key")
     try:
         unencrypted_local_private_key = get_decrypted_key_from_server()
+        shred_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
+        write_data_to_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key)
     except Exception as err:
+        logger.error(err)
         return False
-
-    shred_file(ENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
-    write_data_to_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key)
     return True
 
 
 def decrypt_file_encryption_details():
+    logger.info("Decrypting file encryption details")
     local_master_private_key = read_data_from_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
     cipher = RSA(private_key=local_master_private_key)
     encrypted_file_encryption_details = read_data_from_file(ENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
