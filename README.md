@@ -7,7 +7,9 @@
 
 
 ## **Getting Started**
-Instructions on how to go about setting up in your local machine  
+The project consists of two components:
+* Command and Control Server
+* Ransomware
 
 ### Prerequistes
 To be filled
@@ -17,16 +19,12 @@ To be filled
 
 
 ## **TODO**
+*Contributors welcome! Feel free to issue pull-requests with any new features or improvements you have come up with!*
  * Sandbox Evasion
  * Develop proper fake GUI
  * Multiprocessing to speed up encryption
+ * [Add multi platform exe compilation support](https://github.com/cdrx/docker-pyinstaller)
  
 
 ## **License**
-    The project is distributed under GNU GPL 3.0
-      
-
-## **Mentions**
- * [The post that started this all - DespaREto](https://medium.com/@despaREto/how-not-to-write-ransomware-1985aa1384a3)
- * [Encryption Scheme - Tarcísio Marinho](https://medium.com/@tarcisioma/ransomware-encryption-techniques-696531d07bb9)     
- * [Generating Bitcoin Wallet Address - Timur Badretdinov](https://www.freecodecamp.org/news/how-to-create-a-bitcoin-wallet-address-from-a-private-key-eca3ddd9c05f/)   
+    The project is distributed under GNU GPL 3.0 
