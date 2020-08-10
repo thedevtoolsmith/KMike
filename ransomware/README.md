@@ -6,15 +6,25 @@
        
 
 ## **File Structure and Explanation**
-    basic_functionality => Encryption and Decryption related code
+    core => Ransomware code
+      |
+      |_ comms => Server communication code
+           |
+           |_ bitcoin_address.py => Sends request for bitcoin address generation to the server after encryption
+           |_ cnc_generator.py => Generates a list of domains for communication
+           |_ decrypt.py => Sends request to verify payment and decrypt data
+      |
+      |_ crypto => Definitions related to encryption and decryption
+           |_ asymmetric_encryption.py => Contains definitions related to RSA
+           |_ symmetric_encryption.py => Contains defintions related to AES
       |
       |_  __init__.py => Make python file a package
       |_  __main__.py => Driver file which specifies the files to be encrypted and calls required functions
-      |_  asymmetric_encryption.py => Contains definitions related to RSA and ECC
+      |_ 
       |_  comms.py => Has functions to communicate with the C&C server
       |_  decrypt_files.py => Has functions which decrypt files and keys 
       |_  encrypt_files.py => Has functions which encrypt files and keys
-      |_  symmetric_encryption.py => Contains defintions related to AES
+      
       |_  utils.py => Helper functions needed to perform common tasks
 
 ## **Points to note**

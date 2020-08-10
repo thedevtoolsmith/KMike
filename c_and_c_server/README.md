@@ -9,8 +9,8 @@
       |_ db.py => Functions related to database operations
       |_ payment.py => Bitcoin address generation and payment verification
       |_ server.py => The server code with helper functions for decryption
-      |_utils.py => Driver script for processing requests
-      |_validation.py => Validate request parameters
+      |_ utils.py => Driver script for processing requests
+      |_ validation.py => Validate request parameters
 
 ## **Points to note**
 * The bitcoin payment verification implements the payment checking logic but returns true irrespective of the payment status for testing.
