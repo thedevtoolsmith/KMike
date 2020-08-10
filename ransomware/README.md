@@ -15,17 +15,24 @@
            |_ decrypt.py => Sends request to verify payment and decrypt data
       |
       |_ crypto => Definitions related to encryption and decryption
+           |
            |_ asymmetric_encryption.py => Contains definitions related to RSA
            |_ symmetric_encryption.py => Contains defintions related to AES
       |
-      |_  __init__.py => Make python file a package
-      |_  __main__.py => Driver file which specifies the files to be encrypted and calls required functions
-      |_ 
-      |_  comms.py => Has functions to communicate with the C&C server
-      |_  decrypt_files.py => Has functions which decrypt files and keys 
-      |_  encrypt_files.py => Has functions which encrypt files and keys
+      |_ gui => GUI related stuff
+           |
+           |_ start_menu.py => Definitions related to GUI windows
+      |
+      |_ utils => Helper functions needed to perform common tasks
+           |
+           |_ file_ops.py => 
+           |_ generators.py =>
+           |_ statistics.py =>
+      |
+      |_ __main__.py => Driver file which specifies the files to be encrypted and calls required functions
+      |_ decrypt_files.py => Has functions which decrypt files and keys 
+      |_ encrypt_files.py => Has functions which encrypt files and keys
       
-      |_  utils.py => Helper functions needed to perform common tasks
 
 ## **Points to note**
 * The details such as file_path and AES initialization vector are base64 encoded before being written to disk because I ran into some exceptions while trying to store them as they were.
