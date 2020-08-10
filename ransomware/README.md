@@ -6,33 +6,36 @@
        
 
 ## **File Structure and Explanation**
-    core => Ransomware code
+    ransomware => Ransomware code
       |
-      |_ comms => Server communication code
-           |
-           |_ bitcoin_address.py => Sends request for bitcoin address generation to the server after encryption
-           |_ cnc_generator.py => Generates a list of domains for communication
-           |_ decrypt.py => Sends request to verify payment and decrypt data
-      |
-      |_ crypto => Definitions related to encryption and decryption
-           |
-           |_ asymmetric_encryption.py => Contains definitions related to RSA
-           |_ symmetric_encryption.py => Contains defintions related to AES
-      |
-      |_ gui => GUI related stuff
-           |
-           |_ start_menu.py => Definitions related to GUI windows
-      |
-      |_ utils => Helper functions needed to perform common tasks
-           |
-           |_ file_ops.py => 
-           |_ generators.py =>
-           |_ statistics.py =>
-      |
-      |_ __main__.py => Driver file which specifies the files to be encrypted and calls required functions
-      |_ decrypt_files.py => Has functions which decrypt files and keys 
-      |_ encrypt_files.py => Has functions which encrypt files and keys
-      
+      |_ executable.py => Entrypoint for making code into executable
+      |_ core => Ransomware code
+          |
+          |_ comms => Server communication code
+              |
+              |_ bitcoin_address.py => Sends request for bitcoin address generation to the server after encryption
+              |_ cnc_generator.py => Generates a list of domains for communication
+              |_ decrypt.py => Sends request to verify payment and decrypt data
+          |
+          |_ crypto => Definitions related to encryption and decryption
+              |
+              |_ asymmetric_encryption.py => Contains definitions related to RSA
+              |_ symmetric_encryption.py => Contains defintions related to AES
+          |
+          |_ gui => GUI related stuff
+              |
+              |_ start_menu.py => Definitions related to GUI windows
+          |
+          |_ utils => Helper functions needed to perform common tasks
+              |
+              |_ file_ops.py => File read write operations
+              |_ generators.py => Generates RSA key pair and client ID
+              |_ statistics.py => Collects various statistics about the infected machine
+          |
+          |_ __main__.py => Driver file which specifies the files to be encrypted and calls required functions
+          |_ decrypt_files.py => Has functions which decrypt files and keys 
+          |_ encrypt_files.py => Has functions which encrypt files and keys
+
 
 ## **Points to note**
 * The details such as file_path and AES initialization vector are base64 encoded before being written to disk because I ran into some exceptions while trying to store them as they were.
