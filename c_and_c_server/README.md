@@ -1,4 +1,4 @@
-## **Server Layput and Functionality**
+## **Server Layout and Functionality**
     /initialise => This endpoint generates bitcoin address for each victim
     /decrypt => The ransomware will hit this endpoint after making payment to verify the payment and decrypt the RSA keys
 
@@ -11,3 +11,6 @@
       |_ server.py => The server code with helper functions for decryption
       |_utils.py => Driver script for processing requests
       |_validation.py => Validate request parameters
+
+## **Points to note**
+* The bitcoin payment verification implements the payment checking logic but returns true irrespective of the payment status for testing.
