@@ -10,7 +10,7 @@
 The project contains two components:
 * Command and Control Server
 * Ransomware   
-<p>The execution instructions are given in the individual folders: [ransomware](./tree/master/ransomware) and [server](./tree/master/c_and_c_server)</p>
+<p>The execution instructions are given in the individual folders: [ransomware](https://github.com/Suryak-5328/KMike/tree/master/ransomware) and [server](https://github.com/Suryak-5328/KMike/tree/master/c_and_c_server)</p>
 
 ## Contributions
 To be filled
