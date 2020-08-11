@@ -1,0 +1,1 @@
+The master_key_pair_gen helps to generate new RSA key pair for the server and ransomware. It is shipped with a key pair by default and running this will replace the keypair with a new one. In the ransomware folder, you'll see a new file named `MASTER_PUBLIC_KEY`. You can open it and copy its contents to the `MASTER_PUBLIC_KEY` variable in `config.py`
