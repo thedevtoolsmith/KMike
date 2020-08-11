@@ -42,3 +42,4 @@
 * The encrypted local private key is being sent as a base64 encoded string because bytes are not JSON serializable.
 * All the base64 encoded data will be bytes, so the conversion to ASCII needs to be done before getting them as strings. ASCII was chosen because the `b64decode()` functioncan handle ASCII strings by default.
 * The `encrypted_file_path` key in the dictionary in `encrypt_files()` utf-8 encoding happens because b64encode accepts only byte objects.
+* Some of the file encryption details are split into parts, encrypted and stored in a list when they are too large to be encrypted as a whole.

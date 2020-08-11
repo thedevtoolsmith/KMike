@@ -51,6 +51,7 @@ def encrypt_file_details(cipher, b64encoded_aes_secret_key, b64encoded_initializ
 
 
 def start_encryption(file_paths):
+    # Check for local key existence to determine if the encryption has already started and was interrupted
     if not path.exists(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION):
         local_public_key = generate_rsa_key_pair()
         write_data_to_file(LOCAL_RSA_PUBLIC_KEY_FILE_LOCATION, local_public_key)

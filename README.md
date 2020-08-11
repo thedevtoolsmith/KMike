@@ -6,17 +6,14 @@
 <p>The ransomware design intentionally includes some choices to deter people from using it for nefarious purposes.</p>
 
 
-## **Getting Started**
-The project consists of two components:
-* Command and Control Server
-* Ransomware
+## Installation
+The project contains two components 
 
-### Prerequistes
+## Usage
 To be filled
 
-### Installing/Building
+## Contributions
 To be filled
-
 
 ## **TODO**
 *Contributors welcome! Feel free to issue pull-requests with any new features or improvements you have come up with!*

