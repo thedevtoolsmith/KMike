@@ -7,10 +7,10 @@
 
 
 ## Installation
-The project contains two components 
-
-## Usage
-To be filled
+The project contains two components:
+* Command and Control Server
+* Ransomware   
+<p>The execution instructions are given in the individual folders: [ransomware](./ransomware) and [server](./c_and_c_server)</p>
 
 ## Contributions
 To be filled
