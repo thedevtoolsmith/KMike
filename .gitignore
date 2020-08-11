@@ -138,10 +138,8 @@ log/
 .Spotlight-V100
 .Trashes
 *.db
-config.py
 *.5328
 ransomware/core/MASTER_PUBLIC_KEY
-c_and_c_server/MASTER_PRIVATE_KEY
 c_and_c_server/venv/
 ransomware/venv/
 encrypt_test/
