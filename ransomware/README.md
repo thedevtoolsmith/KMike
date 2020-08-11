@@ -1,4 +1,5 @@
 ## Installation
+**Setup the server before running the ransomware**  
 The project can be run in Python 3.6 and above.
 
 Clone the repository
@@ -32,7 +33,7 @@ To be filled
 ## Usage
 Run the program
 ```
-python -m ransomware
+python -m core
 ```
 
 ## **Encryption Mechanism**

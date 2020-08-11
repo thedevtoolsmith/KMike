@@ -6,9 +6,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# TODO: Add exception handling
-# TODO: Add explicit garbage collection
 
+# TODO: Add explicit garbage collection
+# TODO: Show proper error messages in GUI
 
 def main():
     app = start_menu.tkinterApp() 
