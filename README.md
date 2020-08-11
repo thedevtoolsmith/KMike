@@ -12,10 +12,8 @@ The project contains two components:
 * Ransomware   
 <p>The execution instructions are given in the individual folders: <a href="https://github.com/Suryak-5328/KMike/tree/master/ransomware">ransomware</a> and <a href="https://github.com/Suryak-5328/KMike/tree/master/c_and_c_server">server</a></p>
 
-## Contributions
-To be filled
 
-## **TODO**
+## **TODOs**
 *Contributors welcome! Feel free to issue pull-requests with any new features or improvements you have come up with!*
  * Sandbox Evasion
  * Develop proper fake GUI
