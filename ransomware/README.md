@@ -1,3 +1,40 @@
+## Installation
+The project can be run in Python 3.6 and above.
+
+Clone the repository
+```
+git clone https://github.com/Suryak-5328/KMike.git
+```
+
+Navigate to the c_and_c_server folder in the cloned repository
+```
+cd KMike/ransomware
+```
+
+[Create a python virtual environment](https://docs.python.org/3/tutorial/venv.html)
+```
+python -m venv venv
+```
+
+Activate the virtual environment
+```
+source venv/bin/activate
+```
+
+Install the required packages 
+```
+pip install -r requirements.txt
+```
+
+## Building the exe
+To be filled
+
+## Usage
+Run the program
+```
+python -m ransomware
+```
+
 ## **Encryption Mechanism**
     Encrypt all user files with AES-256-CBC.
     Random AES key and IV for each file.
